@@ -76,7 +76,7 @@ if (!isset($_SESSION['UserID'])) {
 
             <div class="text-end">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete a Patient</button>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#messageModal">Add New Patient</button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">Add New Patient</button>
 
             </div>
         </div>
@@ -190,11 +190,11 @@ if (!isset($_SESSION['UserID'])) {
         </div>
             
     <!-- Create Patient Modal -->
-<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title" id="messageModalLabel">Create a New Patient</h3>
+        <h3 class="modal-title" id="createModalLabel">Create a New Patient</h3>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -217,14 +217,21 @@ if (!isset($_SESSION['UserID'])) {
                     <input type="date" class="form-control" id="patientBirthdate_create" required>
                 </div>
                 <div class="mb-3">
-                    <label for="patientGender_create" class="form-label">Gender:</label>
-                    <select id="patientGender_create" class="form-select" required>
-                        <option disabled selected value="">Select gender...</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
-                    </select>
+                    <label class="form-label">Gender:</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="patientGender_update" id="maleRadio_update" value="Male" required>
+                        <label class="form-check-label" for="maleRadio_update">Male</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="patientGender_update" id="femaleRadio_update" value="Female" required>
+                        <label class="form-check-label" for="femaleRadio_update">Female</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="patientGender_update" id="otherRadio_update" value="Other" required>
+                        <label class="form-check-label" for="otherRadio_update">Other</label>
+                    </div>
                 </div>
+
                 <div class="mb-3">
                     <label for="patientAddress_create" class="form-label">Address:</label>
                     <input type="text" class="form-control" id="patientAddress_create" placeholder="Enter patient address">

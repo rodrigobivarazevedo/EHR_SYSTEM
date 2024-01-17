@@ -144,6 +144,7 @@ function update_patient() {
             success: function(response) {
                 if (response.success){
                     alert(response.success);
+                    location.reload();
                 } else if(response.error){
                     alert(response.error);
                 }
@@ -167,7 +168,7 @@ function createPatient() {
     lastName = document.getElementById('lastname_create').value;
     email = document.getElementById('patientEmail_create').value;
     birthdate = document.getElementById('patientBirthdate_create').value;
-    gender = document.getElementById('patientGender_create').value;
+    gender = document.querySelector('input[name="patientGender_update"]:checked').value;
     address = document.getElementById('patientAddress_create').value;
     contactNumber = document.getElementById('patientContactNumber_create').value;
 
@@ -262,7 +263,7 @@ function delete_patient_ajax(patientID) {
             if (response.success){
                 alert(response.success);
                 // Close the modal after submission
-                $('#deleteModal').modal('hide');
+                location.reload();
             } else if (response.error){
                 alert(response.error);
             }
