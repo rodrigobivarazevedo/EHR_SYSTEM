@@ -199,6 +199,10 @@ function create_patient(firstName, lastName, email, birthdate, gender, address, 
         success: function(response) {
             if (response.success){
                 alert(response.success);
+                // Get the form element and reset it
+                var createPatientForm = document.getElementById('createPatientForm');
+                createPatientForm.reset();
+                // Close the modal
                 $('#createModal').modal('hide');
             } else if(response.error){
                 alert(response.error);
@@ -263,7 +267,8 @@ function delete_patient_ajax(patientID) {
             if (response.success){
                 alert(response.success);
                 // Close the modal after submission
-                location.reload();
+                var deletePatientForm = document.getElementById('deletePatientForm');
+                deletePatientForm.reset();
             } else if (response.error){
                 alert(response.error);
             }
