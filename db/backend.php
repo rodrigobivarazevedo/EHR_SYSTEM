@@ -85,35 +85,6 @@ class Doctorsinfo
         }
     }
 
-    public function check_available_timeslots($dbo, $DoctorID, $ClinicID, $speciality)
-    {
-        try {
-            // Use placeholders in the SQL query
-            $statement = $dbo->conn->prepare("SELECT SlotID, DoctorID, ClinicID, DATE, StartTime FROM TimeSlots
-              WHERE DoctorID = :DoctorID
-              AND speciality = :speciality
-              AND ClinicID = :ClinicID
-              AND AvailabilityStatus = 'Available'");
-
-            // Bind parameters
-            $statement->bindParam(':DoctorID', $DoctorID, PDO::PARAM_INT); 
-            $statement->bindParam(':speciality', $speciality, PDO::PARAM_STR);
-            $statement->bindParam(':ClinicID', $ClinicID, PDO::PARAM_INT); 
-    
-            // Execute statement
-            $statement->execute();
-
-           // Fetch results
-           $returned_value = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-           // Encode the array as JSON and return it
-           return json_encode($returned_value);
-        } catch (PDOException $e) {
-            // Handle exceptions, log errors, or return an error message
-            echo json_encode(["error" => "Error inserting appointment: " . $e->getMessage()]);
-        }
-    }
-
 }
 
 
@@ -191,94 +162,57 @@ class All_Info
 }
 
 
-class DoctorScheduler {
-    
-        public function createDoctorSchedule($dbo, $DoctorID, $ClinicID, $startDate, $endDate, $workingDays, $startTime, $endTime, $speciality)
-    {
-        try {
-            $interval = new DateInterval('PT30M'); // 30 minutes interval
-
-            $currentDate = clone $startDate;
-
-            while ($currentDate <= $endDate) {
-                $currentDayOfWeek = $currentDate->format('N'); // 1 (Monday) to 7 (Sunday)
-
-                // Check if the current day is a working day (Monday) (Wednesday) (Friday)
-                if (in_array($currentDayOfWeek, $workingDays)) {
-                    $currentTime = clone $currentDate;
-                    $currentTime->setTime($startTime->format('H'), $startTime->format('i'));
-
-                    // Use a separate clone for setting the end time
-                    $endTimeClone = clone $currentDate;
-                    $endTimeClone->setTime($endTime->format('H'), $endTime->format('i'));
-
-                    while ($currentTime < $endTimeClone) {
-                        $currentDateTime = $currentTime->format('Y-m-d H:i:s');
-                        $endTimeDateTime = $currentTime->add($interval)->format('Y-m-d H:i:s');
-
-                        // Insert time slot with default availability
-                        $insertStatement = $dbo->conn->prepare("INSERT INTO TimeSlots (DoctorID, ClinicID, Date, StartTime, EndTime, AvailabilityStatus, speciality) VALUES (:DoctorID, :ClinicID, :Date, :StartTime, :EndTime, 'Available', :speciality)");
-                        $insertStatement->bindParam(':DoctorID', $DoctorID, PDO::PARAM_INT);
-                        $insertStatement->bindParam(':ClinicID', $ClinicID, PDO::PARAM_INT);
-                        $insertStatement->bindParam(':Date', $currentDateTime, PDO::PARAM_STR);
-                        $insertStatement->bindParam(':StartTime', $currentDateTime, PDO::PARAM_STR);
-                        $insertStatement->bindParam(':EndTime', $endTimeDateTime, PDO::PARAM_STR);
-                        $insertStatement->bindParam(':speciality', $speciality, PDO::PARAM_STR);
-                        $insertStatement->execute();
-                    }
-                }
-
-                $currentDate->add(new DateInterval('P1D')); // Move to the next day
-            }
-
-            return json_encode(["message" => "Doctor schedule created successfully"]);
-        } catch (PDOException $e) {
-            return json_encode(["error" => "Error creating doctor schedule: " . $e->getMessage()]);
-        } catch (Exception $e) {
-            return json_encode(["error" => $e->getMessage()]);
-        }
-    }
-
-}
-
-
 class Users{
 
-        public function create_user($dbo, $Username, $Password, $Email, $ContactNumber, $FirstName, $LastName, $gender, $birthdate) {
+    public function create_user($dbo, $Username, $Password, $Email, $ContactNumber, $FirstName, $LastName, $gender, $birthdate, $speciality) {
         try {
-            // Check if any of the required values are null
-            if (empty($Username) || empty($Password) || empty($Email) || empty($ContactNumber)) {
-                return json_encode(["error" => "All required fields must be provided."]);
-            }
-
             $hashed_password = password_hash($Password, PASSWORD_DEFAULT);
-            $statement = $dbo->conn->prepare("INSERT INTO users (Username, Password, Email, ContactNumber) 
-                VALUES (:Username, :hashed_password, :Email, :ContactNumber)");
-
+    
+            // Insert into users table
+            $insertUserQuery = "INSERT INTO users (Username, Password, Email, ContactNumber) 
+                VALUES (:Username, :hashed_password, :Email, :ContactNumber)";
+    
+            $statement = $dbo->conn->prepare($insertUserQuery);
             $statement->bindParam(':Username', $Username, PDO::PARAM_STR);
             $statement->bindParam(':hashed_password', $hashed_password, PDO::PARAM_STR);
             $statement->bindParam(':Email', $Email, PDO::PARAM_STR);
             $statement->bindParam(':ContactNumber', $ContactNumber, PDO::PARAM_STR);
-
+    
             // Execute statement
             $statement->execute();
-
+    
             // Get the UserID of the newly created user
             $userID = $dbo->conn->lastInsertId();
-
+    
+            // Insert into doctors table
+            $insertDoctorQuery = "INSERT INTO doctors (FirstName, LastName, Speciality, UserID, gender, birthdate) 
+                VALUES (:FirstName, :LastName, :Speciality, :UserID, :gender, :birthdate)";
+    
+            $statement = $dbo->conn->prepare($insertDoctorQuery);
+            $statement->bindParam(':FirstName', $FirstName, PDO::PARAM_STR);
+            $statement->bindParam(':LastName', $LastName, PDO::PARAM_STR);
+            $statement->bindParam(':Speciality', $speciality, PDO::PARAM_STR);
+            $statement->bindParam(':UserID', $userID, PDO::PARAM_INT);
+            $statement->bindParam(':gender', $gender, PDO::PARAM_STR);
+            $statement->bindParam(':birthdate', $birthdate, PDO::PARAM_STR);
+    
+            // Execute statement
+            $statement->execute();
+    
             // Return success message or any other information
-            return json_encode(["message" => "Registration successful,", "patient" => $patients]);
+            return json_encode(["message" => "Registration successful"]);
         } catch (PDOException $e) {
             // Check for unique constraint violation
             if ($e->getCode() == 23000 && strpos($e->getMessage(), 'unique_username') !== false) {
                 // Return a custom error message for duplicate username
-                return json_encode(["error" => "Username already exists. Please choose a different username."]);
+                return json_encode(["error" => "Username already exists"]);
             } else {
                 // Handle other exceptions or return a generic error message
                 return json_encode(["error" => "An error occurred during registration. Please try again."]);
             }
         }
     }
+    
 
     
 

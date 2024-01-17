@@ -41,7 +41,7 @@ function isValidEmail(email) {
 // Function to validate contact number
 function isValidContactNumber(contactNumber) {
     // Use a regular expression for basic contact number validation
-    var contactNumberRegex = /^\d{10}$/;
+    var contactNumberRegex = /^\d{9}$/;
     return contactNumberRegex.test(contactNumber);
 }
 
@@ -57,20 +57,20 @@ function register() {
 
     submitButton.disabled = true;
 
-    var username = document.getElementById("username").value;
-    var email = document.getElementById("email").value;
-    var contactNumber = document.getElementById("contactNumber").value;
-    var password = document.getElementById("password").value;
-    var confirmPassword = document.getElementById("confirmPassword").value;
-    
-    var FirstName = document.getElementById("FirstName").value;
-    var LastName = document.getElementById("LastName").value;
-    var gender = document.getElementById("gender").value;
-    var birthdate = document.getElementById("birthdate").value;
+    let username = document.getElementById("username").value;
+    let email = document.getElementById("email").value;
+    let contactNumber = document.getElementById("contactNumber").value;
+    let password = document.getElementById("password").value;
+    let confirmPassword = document.getElementById("confirmPassword").value;
+    let speciality = document.getElementById("speciality").value;
+    let FirstName = document.getElementById("FirstName").value;
+    let LastName = document.getElementById("LastName").value;
+    let gender = document.getElementById("gender").value;
+    let birthdate = document.getElementById("birthdate").value;
     
      
     // Check if any of the required fields are empty
-    if (!username || !email || !contactNumber || !password || !confirmPassword || !FirstName || !LastName || !gender || !birthdate) {
+    if (!username || !email || !contactNumber || !password || !confirmPassword || !FirstName || !LastName || !gender || !birthdate || !speciality) {
         alert("All required fields must be provided.");
         submitButton.disabled = false;  // Re-enable the submit button
         return;
@@ -103,6 +103,7 @@ function register() {
         type: "POST",
         dataType: "json",
         data: {
+            speciality: speciality,
             username: username,
             email: email,
             contactNumber: contactNumber,
@@ -115,20 +116,17 @@ function register() {
         },
         success: function (response) {
             // Check if the registration was successful
-            if (response.message === "Registration successful") {
+            if (response.message) {
                 // Redirect to a success page or handle as needed
-                alert("Registration successful!");
-                window.location.href = "/EHR_system/ui/index.php";  // Adjust the redirection URL
+                alert(response.message);
+                window.location.href = "/EHR_system/ui/MyFastCARE/login.php"; 
             } else {
-                // Handle unsuccessful registration
-                console.log(response.error || response.message);
-
                 // Check for the specific error message
                 if (response.error && response.error.includes("Username already exists")) {
                     alert("Username already exists. Please choose a different username.");
                 } else {
                     // Display a generic error message for other cases
-                    alert("Registration failed. Please check your information and try again.");
+                    alert(response.error);
                 }
             }
         },

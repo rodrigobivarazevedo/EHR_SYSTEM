@@ -105,9 +105,7 @@
               </li>
             </ul>
             <div class="text-end">
-              <a href="../booking.php"><button type="button" class="btn btn-secondary">Book Appointment</button></a>
-              </div>
-           
+            
           </div>
         </div>
       </nav>
@@ -141,6 +139,20 @@
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                         <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="speciality" class="form-label">Speciality:</label>
+                <select id="speciality" class="form-select" required>
+                        <option disabled selected value="">Select Speciality...</option>
+                        <option value="Cardiology">Cardiology</option>
+                        <option value="Nephrology">Nephrology</option>
+                        <option value="Gastroenterology">Gastroenterology</option>
+                        <option value="Gynecology and Obstetrics">Gynecology and Obstetrics</option>
+                        <option value="Dentistry">Dentistry</option>
+                        <option value="Rheumatology">Rheumatology</option>
+                        <option value="Dermatology">Dermatology</option>
+                        <option value="Family Doctor">Family Doctor</option>
                     </select>
                 </div>
                 <div class="form-group">

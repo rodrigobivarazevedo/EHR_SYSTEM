@@ -68,7 +68,7 @@
               </li>
             </ul>
             <div class="text-end">
-              <a href="booking.php"><button type="button" class="btn btn-secondary">Book Appointment</button></a>
+            <a href="MyFastCARE/registration.php"><button type="button" class="btn btn-secondary">Register</button></a>
               </div>
            
           </div>

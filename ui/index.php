@@ -66,7 +66,7 @@
               </li>
             </ul>
             <div class="text-end">
-              <a href="booking.php"><button type="button" class="btn btn-secondary">Register</button></a>
+              <a href="MyFastCARE/registration.php"><button type="button" class="btn btn-secondary">Register</button></a>
               </div>
            
           </div>
@@ -102,7 +102,7 @@
               <div class="carousel-caption">
                 <h1>MyFastCARE</h1>
                 <p>Personalized care from the comfort of your home.</p>
-                <p><a class="btn btn-secondary" href="#myfastcare">Sign up today</a></p>
+                <p><a class="btn btn-secondary" href="#myfastcare">Discover</a></p>
               </div>
             </div>
           </div>

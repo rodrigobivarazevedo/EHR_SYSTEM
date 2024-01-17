@@ -48,7 +48,7 @@ if ($action === "register") {
     $password = isset($_POST["password"]) ? filter_var($_POST["password"], FILTER_SANITIZE_STRING) : null;
     $email = isset($_POST["email"]) ? filter_var($_POST["email"], FILTER_SANITIZE_EMAIL) : null;
     $contactNumber = isset($_POST["contactNumber"]) ? filter_var($_POST["contactNumber"], FILTER_SANITIZE_STRING) : null;
-
+    $speciality = isset($_POST["speciality"]) ? filter_var($_POST["speciality"], FILTER_SANITIZE_STRING) : null;
     $FirstName = isset($_POST["FirstName"]) ? filter_var($_POST["FirstName"], FILTER_SANITIZE_STRING) : null;
     $LastName = isset($_POST["LastName"]) ? filter_var($_POST["LastName"], FILTER_SANITIZE_STRING) : null;
     $gender = isset($_POST["gender"]) ? filter_var($_POST["gender"], FILTER_SANITIZE_STRING) : null;
@@ -56,43 +56,18 @@ if ($action === "register") {
 
 
     // Check if any of the required values are null
-    if (empty($username) || empty($password) || empty($email) || empty($contactNumber)) {
+    if (empty($username) || empty($password) || empty($email) || empty($contactNumber) || empty($speciality)) {
         echo json_encode(["error" => "All required fields must be provided."]);
         exit();
     }
 
-    $result = $pdo->create_user($dbo, $username, $password, $email, $contactNumber, $FirstName, $LastName, $gender, $birthdate);
+    $result = $pdo->create_user($dbo, $username, $password, $email, $contactNumber, $FirstName, $LastName, $gender, $birthdate, $speciality);
 
-    // Check if the result is an error
-    if (isset($result["error"])) {
-        // Handle the error, for example, send an appropriate response to the client
-        echo json_encode($result);
-    } else {
-        echo $result;
-    }
+    echo $result;
+
     exit();
 }
 
 
-if ($action === "check_user") {
-
-    $UsernameOrEmail = $_POST["UsernameOrEmail"];
-    $password = $_POST["password"];
-    $action = $_POST["action"];
-
-    $dbo = new Database();
-    $pdo = new Users();
-
-    $result = $pdo->check_user($dbo, $UsernameOrEmail);
-
-    // Check if the result is an error
-    if (isset($result["error"])) {
-        // Handle the error, for example, send an appropriate response to the client
-        echo ($result);
-    } else {
-        echo $result;
-    }
-    exit();
-}
 
 ?>
