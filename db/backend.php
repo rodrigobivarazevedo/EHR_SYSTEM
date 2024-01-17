@@ -3,139 +3,21 @@ require_once "database.php";
 
 class Appointmentsinfo
 {
-    public function get_appointment_info($dbo, $speciality, $consultation_type)
+    
+    public function get_appointments($dbo, $DoctorID)
     {
         try {
-            if ($consultation_type !== "" && $speciality === "") {
-                $statement = $dbo->conn->prepare("SELECT consultation_type, speciality, clinic FROM appointmentsinfo WHERE consultation_type = :consultation_type");
-            } else if ($consultation_type === "" && $speciality !== "") {
-                $statement = $dbo->conn->prepare("SELECT consultation_type, speciality, clinic FROM appointmentsinfo WHERE speciality = :speciality");
-            }else if ($consultation_type !== "" && $speciality !== "") {
-                $statement = $dbo->conn->prepare("SELECT consultation_type, speciality, clinic FROM appointmentsinfo WHERE speciality = :speciality AND consultation_type = :consultation_type");
-            }
-            // Conditionally bind parameters
-            if ($speciality !== "") {
-                $statement->bindParam(':speciality', $speciality, PDO::PARAM_STR);
-            }
-            if ($consultation_type !== "") {
-                $statement->bindParam(':consultation_type', $consultation_type, PDO::PARAM_STR);
-            }
-
-            // Execute statement
-            $statement->execute();
-
-            // Fetch results
-            $returned_value = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-            // Encode the array as JSON and return it
-            return json_encode($returned_value);
-        } catch (PDOException $e) {
-            // Handle the exception (e.g., log the error, display a user-friendly message)
-            return json_encode(["error" => $e->getMessage()]);
-        }
-    }
-
-    public function check_available_timeslots($dbo, $ClinicID, $speciality, $DoctorID)
-    {
-        try {
-            if ($DoctorID === "") {
-                // Use placeholders in the SQL query
-                $statement = $dbo->conn->prepare("SELECT SlotID, DoctorID, ClinicID, DATE, StartTime FROM TimeSlots
-                WHERE ClinicID = :ClinicID
-                AND speciality = :speciality
-                AND AvailabilityStatus = 'Available'");
-
-                // Bind parameters
-                $statement->bindParam(':ClinicID', $ClinicID, PDO::PARAM_INT); 
-                $statement->bindParam(':speciality', $speciality	, PDO::PARAM_STR);
-            } else {
-                // Use placeholders in the SQL query
-                $statement = $dbo->conn->prepare("SELECT SlotID, DoctorID, ClinicID, DATE, StartTime FROM TimeSlots
-                WHERE ClinicID = :ClinicID
-                AND DoctorID = :DoctorID
-                AND speciality = :speciality
-                AND AvailabilityStatus = 'Available'");
-
-                // Bind parameters
-                $statement->bindParam(':DoctorID', $DoctorID, PDO::PARAM_INT);
-                $statement->bindParam(':ClinicID', $ClinicID, PDO::PARAM_INT); 
-                $statement->bindParam(':speciality', $speciality, PDO::PARAM_STR);
-
-            }
             
-            // Execute statement
-            $statement->execute();
-
-           // Fetch results
-           $returned_value = $statement->fetchAll(PDO::FETCH_ASSOC);
-            
-           // Encode the array as JSON and return it
-           return json_encode($returned_value);
-        } catch (PDOException $e) {
-            // Handle exceptions, log errors, or return an error message
-            echo json_encode(["error" => "Error search timeslots: " . $e->getMessage()]);
-        }
-    }
-
-
-        public function post_appointment_info($dbo, $UserID, $DoctorID, $ClinicID, $TimeSlotID, $ConsultationType, $Speciality)
-    {
-        try {
             // Use placeholders in the SQL query
-            $statement = $dbo->conn->prepare("INSERT INTO Appointments (UserID, DoctorID, ClinicID, TimeSlotID, ConsultationType, Speciality) VALUES (:UserID, :DoctorID, :ClinicID, :TimeSlotID, :ConsultationType, :Speciality)");
+            $statement = $dbo->conn->prepare("SELECT a.AppointmentID as AppointmentID, a.Timeslot as Timeslot, a.AppointmentDate as AppointmentDate, p.PatientID as PatientID, p.FirstName as PatientFirstName, p.LastName as PatientLastName 
+            FROM appointments a
+            JOIN patients p ON a.PatientID = p.PatientID
+            WHERE a.DoctorID = :DoctorID
+            ");
 
             // Bind parameters
-            $statement->bindParam(':UserID', $UserID, PDO::PARAM_INT);
-            $statement->bindParam(':DoctorID', $DoctorID, PDO::PARAM_INT); 
-            $statement->bindParam(':ClinicID', $ClinicID, PDO::PARAM_INT); 
-            $statement->bindParam(':TimeSlotID', $TimeSlotID, PDO::PARAM_INT);
-            $statement->bindParam(':ConsultationType', $ConsultationType, PDO::PARAM_STR);
-            $statement->bindParam(':Speciality', $Speciality, PDO::PARAM_STR);
-
-            // Execute statement
-            $statement->execute();
-
-            // Update the availability status of the corresponding time slot
-            $updateStatement = $dbo->conn->prepare("UPDATE TimeSlots SET AvailabilityStatus = 'Booked' WHERE SlotID = :TimeSlotID");
-            $updateStatement->bindParam(':TimeSlotID', $TimeSlotID, PDO::PARAM_INT);
-            $updateStatement->execute();
-
-            // Return success message or any other information
-            echo json_encode(["message" => "Appointment created successfully"]);
-        } catch (PDOException $e) {
-            // Handle exceptions, log errors, or return an error message
-            echo json_encode(["error" => "Error inserting appointment: " . $e->getMessage()]);
-        }
-    }
-
-    public function get_appointments($dbo, $UserID, $DoctorID)
-    {
-        try {
-            if ($DoctorID == "") {
-                // Use placeholders in the SQL query
-                $statement = $dbo->conn->prepare("SELECT a.AppointmentID, a.ConsultationType, a.Speciality, t.DATE, t.StartTime, d.FirstName, d.LastName, c.Name
-                FROM appointments a
-                JOIN timeslots t ON a.TimeSlotID = t.SlotID
-                JOIN doctors d ON a.DoctorID = d.DoctorID
-                JOIN clinics c ON a.ClinicID = c.ClinicID
-                WHERE a.UserID = :UserID
-                ");
-    
-                // Bind parameters
-                $statement->bindParam(':UserID', $UserID, PDO::PARAM_INT);
-    
-            } elseif ($UserID == "") {
-                $statement = $dbo->conn->prepare("SELECT a.AppointmentID, a.ConsultationType, a.Speciality, t.DATE, t.StartTime, u.username, c.Name
-                FROM appointments a
-                JOIN timeslots t ON a.TimeSlotID = t.SlotID
-                JOIN users u ON a.UserID = u.UserID
-                JOIN clinics c ON a.ClinicID = c.ClinicID
-                WHERE a.DoctorID = :DoctorID
-                ");
-    
-                // Bind parameters
-                $statement->bindParam(':DoctorID', $DoctorID, PDO::PARAM_INT);
-            }
+            $statement->bindParam(':DoctorID', $DoctorID, PDO::PARAM_INT);
+            
             // Execute statement
             $statement->execute();
             // Fetch results

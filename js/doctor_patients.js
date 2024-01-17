@@ -267,8 +267,7 @@ function delete_patient_ajax(patientID) {
             if (response.success){
                 alert(response.success);
                 // Close the modal after submission
-                var deletePatientForm = document.getElementById('deletePatientForm');
-                deletePatientForm.reset();
+                $('#deleteModal').modal('hide');
             } else if (response.error){
                 alert(response.error);
             }

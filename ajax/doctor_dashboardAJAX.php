@@ -58,7 +58,7 @@ if ($action === "appointments") {
     
     $Doctor = $statement->fetch(PDO::FETCH_ASSOC);
     $DoctorID = $Doctor["DoctorID"];
-    $result = $pdo->get_appointments($dbo, $patient = "", $DoctorID);
+    $result = $pdo->get_appointments($dbo, $DoctorID);
 
     // Check if the result is an error
     if (isset($result["error"])) {

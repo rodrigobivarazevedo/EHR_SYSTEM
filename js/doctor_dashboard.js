@@ -146,15 +146,15 @@ function renderAppointments(data) {
         const contentDiv = document.createElement('div');
 
         const dateParagraph = document.createElement('p');
-        dateParagraph.textContent = `Date: ${item.DATE}`; // Update property name
+        dateParagraph.textContent = `Date: ${item.AppointmentDate}`; // Update property name
         contentDiv.appendChild(dateParagraph);
 
         const timeParagraph = document.createElement('p');
-        timeParagraph.textContent = `Time: ${item.StartTime}`; // Update property name
+        timeParagraph.textContent = `Time: ${item.Timeslot}`; // Update property name
         contentDiv.appendChild(timeParagraph);
 
         const titleHeading = document.createElement('h6');
-        titleHeading.textContent = `Appointment: ${item.ConsultationType}`; // Update property name
+        titleHeading.textContent = `PatientID: ${item.PatientID}   ${item.PatientFirstName} ${item.PatientLastName}`; 
         contentDiv.appendChild(titleHeading);
 
         const doctorParagraph = document.createElement('p');

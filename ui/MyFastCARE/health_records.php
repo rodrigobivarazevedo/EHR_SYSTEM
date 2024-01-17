@@ -108,6 +108,8 @@ if (!isset($_SESSION['UserID'])) {
 
         <div class="album py-5 bg-light">
 
+        <div class="container">
+
             <div class="row">
 
 
@@ -165,6 +167,7 @@ if (!isset($_SESSION['UserID'])) {
                     </div>
                 </div>
     
+            </div>
             </div>
         </div>
             
