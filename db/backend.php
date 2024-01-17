@@ -564,8 +564,9 @@ class Messages
 
 
 class Patients
+
 {
-    public function post_patient($dbo, $doctorID, $firstName, $lastName, $email, $birthdate, $gender, $address, $contactNumber)
+    public function create_patient($dbo, $doctorID, $firstName, $lastName, $email, $birthdate, $gender, $address, $contactNumber)
     {
         try {
             // Check if doctorID exists in the Doctors table

@@ -35,9 +35,7 @@ if ($action === "create_patient") {
         exit(); // Terminate script execution after sending the response
     }
 
-
-    
-    $result = $patients->post_patient($dbo, $doctorID, $firstName, $lastName, $email, $birthdate, $gender, $address, $contactNumber, $user ="");
+    $result = $patients->create_patient($dbo, $doctorID, $firstName, $lastName, $email, $birthdate, $gender, $address, $contactNumber);
 
     // Check if the result is an error
     if (isset($result["error"])) {

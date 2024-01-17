@@ -190,7 +190,7 @@ if (!isset($_SESSION['UserID'])) {
         </div>
             
     <!-- Create Patient Modal -->
-<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -205,7 +205,7 @@ if (!isset($_SESSION['UserID'])) {
                     <input type="text" class="form-control" id="firstname_create" placeholder="Enter patient first name" required>
                 </div>
                 <div class="mb-3">
-                    <label for="lastname_create" class="form-label">First Name:</label>
+                    <label for="lastname_create" class="form-label">Last Name:</label>
                     <input type="text" class="form-control" id="lastname_create" placeholder="Enter patient last name" required>
                 </div>
                 <div class="mb-3">

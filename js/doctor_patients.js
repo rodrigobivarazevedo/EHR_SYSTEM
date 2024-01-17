@@ -143,12 +143,10 @@ function update_patient() {
             data: { PatientID: PatientID, firstName: firstName, lastName: lastName, email: email, birthdate: birthdate, gender: gender, address: address, contactNumber: contactNumber, action: "update_patient" },
             success: function(response) {
                 if (response.success){
-                    alert(response.success)
+                    alert(response.success);
                 } else if(response.error){
-                    alert(response.error)
+                    alert(response.error);
                 }
-                
-                
             },
             error: function(xhr) {
                 // Log detailed error information to the console
@@ -183,27 +181,12 @@ function createPatient() {
     const confirmResult = window.confirm('Are you sure you want to create this patient?');
 
     // Check if the user clicked "OK" in the confirmation alert
-    if (confirmResult) {
-        // Event listener for form submission
-        document.getElementById('createPatientForm').addEventListener('submit', function (event) {
-            event.preventDefault();
-            // Implement your logic for creating a patient
-            
-            const address = document.getElementById('patientAddress').value;
-            const contactNumber = document.getElementById('patientContactNumber').value;
-            // Add more patient data properties as needed
-
-            post_patient(firstName, lastName, email, birthdate, gender, address, contactNumber);
-            console.log('Creating patient:', patientData);
-            // You may submit the form via AJAX or perform other actions
-
-            // Close the modal after submission
-            $('#createPatientModal').modal('hide');
-        });
+    if (confirmResult) {    
+        create_patient(firstName, lastName, email, birthdate, gender, address, contactNumber);     
     }
 }
 
-function post_patient(firstName, lastName, email, birthdate, gender, address, contactNumber) {
+function create_patient(firstName, lastName, email, birthdate, gender, address, contactNumber) {
     $.ajax({
         url: "/EHR_system/ajax/doctor_patientAJAX.php",
         type: "POST",
@@ -213,7 +196,13 @@ function post_patient(firstName, lastName, email, birthdate, gender, address, co
             // Add any code to run before the request is sent (optional)
         },
         success: function(response) {
-            alert(response);
+            if (response.success){
+                alert(response.success);
+                $('#createModal').modal('hide');
+            } else if(response.error){
+                alert(response.error);
+            }
+            
             
         },
         error: function(xhr) {
@@ -262,11 +251,6 @@ function confirmation(firstName, lastName, patientID) {
     }
 }
 
-// Event listener for form submission
-document.getElementById('deletePatientForm').addEventListener('submit', function (event) {
-    event.preventDefault();
-    // Handle form submission if needed
-});
 
 function delete_patient_ajax(patientID) {
     $.ajax({
