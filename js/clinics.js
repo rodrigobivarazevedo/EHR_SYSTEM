@@ -10,15 +10,17 @@ function get_clinics(selectedSpeciality="",action="get_all") {
         dataType: "json", 
         data: { speciality: selectedSpeciality, action1: action },
         success: function(response) {
+            if (response.message){
+                alert(response.message);
+            }
             updateCardUI(response);
-            console.log(response);
         },
         error: function(xhr) {
             // Log detailed error information to the console
             console.log(xhr.responseText);
             
             // Display a user-friendly error message
-            alert("AJAX request failed. Check the console for details.");
+            alert("Server request failed.");
         }
     });
 }

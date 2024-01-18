@@ -56,7 +56,15 @@ function get_patients(parameter, searchQueryInputValue) {
         dataType: "json", // Changed "JSON" to "json"
         data: { parameter: parameter, searchQueryInputValue: searchQueryInputValue, action: "search_patients" },
         success: function(response) {
-            updateCardUI(response)
+            if (response.message) {
+                document.getElementById('patientSearchResults').textContent = `${response.message}`;
+                const content = document.getElementById('patients');
+                content.innerHTML = '';
+            }else{
+                document.getElementById('patientSearchResults').textContent = "Search Results";
+                updateCardUI(response);
+            }
+            
             
         },
         error: function(xhr) {
@@ -64,7 +72,7 @@ function get_patients(parameter, searchQueryInputValue) {
             console.log(xhr.responseText);
             
             // Display a user-friendly error message
-            alert("AJAX request failed. Check the console for details.");
+            alert("Server request failed.");
         }
     });
 }
@@ -145,8 +153,8 @@ function update_patient() {
                 if (response.success){
                     alert(response.success);
                     location.reload();
-                } else if(response.error){
-                    alert(response.error);
+                } else if(response.message){
+                    alert(response.message);
                 }
             },
             error: function(xhr) {
@@ -154,7 +162,7 @@ function update_patient() {
                 console.log(xhr.responseText);
                 
                 // Display a user-friendly error message
-                alert("AJAX request failed. Check the console for details.");
+                alert("Server request failed.");
             }
         });
     }
@@ -204,8 +212,8 @@ function create_patient(firstName, lastName, email, birthdate, gender, address, 
                 createPatientForm.reset();
                 // Close the modal
                 $('#createModal').modal('hide');
-            } else if(response.error){
-                alert(response.error);
+            } else if(response.message){
+                alert(response.message);
             }
             
             
@@ -215,7 +223,7 @@ function create_patient(firstName, lastName, email, birthdate, gender, address, 
             console.log(xhr.responseText);
             
             // Display a user-friendly error message
-            alert("AJAX request failed. Check the console for details.");
+            alert("Server request failed.");
         }
     });
 }
@@ -242,7 +250,7 @@ function deletePatient() {
         },
         error: function(xhr) {
             console.log(xhr.responseText);
-            alert("AJAX request failed. Check the console for details.");
+            alert("Server request failed.");
         }
     });
 }
@@ -268,13 +276,13 @@ function delete_patient_ajax(patientID) {
                 alert(response.success);
                 // Close the modal after submission
                 $('#deleteModal').modal('hide');
-            } else if (response.error){
-                alert(response.error);
+            } else if (response.message){
+                alert(response.message);
             }
         },
         error: function(xhr) {
             console.log(xhr.responseText);
-            alert("AJAX request failed. Check the console for details.");
+            alert("Server request failed.");
         }
     });
 }

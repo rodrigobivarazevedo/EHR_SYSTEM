@@ -10,17 +10,6 @@ CREATE TABLE HealthRecords (
     
 );
 
-CREATE TABLE EHR (
-    ehr_id INT PRIMARY KEY,
-    patient_id INT,
-    demographics VARCHAR(255),
-    personal_stats TEXT,
-    medical_records TEXT, -- List of all health records associated with the patient
-    medications TEXT, -- List of all medications associated with the patient
-
-);
-
-
 -- Patients table
 CREATE TABLE patients (
     PatientID INT PRIMARY KEY AUTO_INCREMENT,
@@ -88,4 +77,16 @@ CREATE TABLE DoctorClinic (
     PRIMARY KEY (DoctorID, ClinicID),
     FOREIGN KEY (DoctorID) REFERENCES Doctors(DoctorID),
     FOREIGN KEY (ClinicID) REFERENCES Clinics(ClinicID)
+);
+
+
+CREATE TABLE Messages (
+    MessageID INT AUTO_INCREMENT PRIMARY KEY,
+    SenderID INT,
+    ReceiverID INT,
+    Content TEXT,
+    Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    IsRead BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (SenderID) REFERENCES Users(UserID),
+    FOREIGN KEY (ReceiverID) REFERENCES Users(UserID)
 );

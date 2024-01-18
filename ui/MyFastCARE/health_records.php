@@ -132,7 +132,7 @@ if (!isset($_SESSION['UserID'])) {
                             <!-- Record edit Form -->
                             <form id="updatePatientForm" class="mt-3">
                                 <div class="mb-3">
-                                    <label for="recordID_update" class="form-label">Patient ID:</label>
+                                    <label for="recordID_update" class="form-label">Record ID:</label>
                                     <input type="text" class="form-control" id="recordID_update" placeholder="Enter record ID" required>
                                 </div>
                                 <div class="mb-3">

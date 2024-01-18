@@ -31,7 +31,7 @@ if ($action === "create_patient") {
     $doctorID = $Doctor["DoctorID"];
     
     if (!$doctorID) {
-        echo json_encode(["error" => "DoctorID not found"]);
+        echo json_encode(["message" => "DoctorID not found"]);
         exit(); // Terminate script execution after sending the response
     }
 
@@ -74,7 +74,7 @@ if ($action === "update_patient") {
     $Doctor = $statement->fetch(PDO::FETCH_ASSOC);
     
     if (!$Doctor) {
-        echo json_encode(["error" => "Doctor not found"]);
+        echo json_encode(["message" => "Doctor not found"]);
         exit(); // Terminate script execution after sending the response
     }
 
@@ -88,7 +88,7 @@ if ($action === "update_patient") {
     $Patient_doctor = $statement->fetch(PDO::FETCH_ASSOC);
     $Patient_doctorID = $Patient_doctor["DoctorID"];
     if ($DoctorID !== $Patient_doctorID) {
-        echo json_encode(["error" => "Patient is not yours"]);
+        echo json_encode(["message" => "Patient is not yours"]);
         exit(); // Terminate script execution after sending the response
     }
 
@@ -122,7 +122,7 @@ if ($action === "delete_patient") {
     $Doctor = $statement->fetch(PDO::FETCH_ASSOC);
     
     if (!$Doctor) {
-        echo json_encode(["error" => "Doctor not found"]);
+        echo json_encode(["message" => "Doctor not found"]);
         exit(); // Terminate script execution after sending the response
     }
 
@@ -161,7 +161,7 @@ if ($action === "search_patients") {
     $Doctor = $statement->fetch(PDO::FETCH_ASSOC);
 
     if (!$Doctor) {
-        echo json_encode(["error" => "Doctor not found"]);
+        echo json_encode(["message" => "Doctor not found"]);
         exit(); // Terminate script execution after sending the response
     }
 

@@ -10,6 +10,11 @@ if ($action === "login") {
     
     $UsernameOrEmail = isset($_POST["UsernameOrEmail"]) ? $_POST["UsernameOrEmail"] : null;
     $password = isset($_POST["password"]) ? $_POST["password"] : null;
+    
+    if (empty($UsernameOrEmail) || empty($password)) {
+        echo json_encode(["message" => "All required fields must be provided."]);
+        exit();
+    }
 
     $dbo = new Database();
     $pdo = new Users();
@@ -57,7 +62,7 @@ if ($action === "register") {
 
     // Check if any of the required values are null
     if (empty($username) || empty($password) || empty($email) || empty($contactNumber) || empty($speciality)) {
-        echo json_encode(["error" => "All required fields must be provided."]);
+        echo json_encode(["message" => "All required fields must be provided."]);
         exit();
     }
 

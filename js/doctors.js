@@ -6,7 +6,12 @@ function get_doctorsInfo(selectedspeciality="", selectedclinic="",action="get_al
         data: { speciality: selectedspeciality, clinic: selectedclinic, action1: action },
         success: function(response) {
             console.log(response);
-            updateCardUI(response);
+            if (response.message) {
+              alert(response.message);
+            }else{
+              updateCardUI(response);
+          }
+            
             
         },
         error: function(xhr) {
@@ -14,7 +19,7 @@ function get_doctorsInfo(selectedspeciality="", selectedclinic="",action="get_al
             console.log(xhr.responseText);
             
             // Display a user-friendly error message
-            alert("AJAX request failed. Check the console for details.");
+            alert("Server request failed.");
         }
     });
 }

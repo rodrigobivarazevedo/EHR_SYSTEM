@@ -169,7 +169,15 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="password">Password</label>
+                        <p>Password Requirements:</p>
+                    <ul>
+                        <li>Minimum length: 8</li>
+                        <li>At least one uppercase letter</li>
+                        <li>At least one lowercase letter</li>
+                        <li>At least one number</li>
+                        <li>At least one special character: !@#$%^&*()_-+=<>?</li>
+                    </ul>
+                    <div id="passwordSuggestion"></div>
                     <input type="password" class="form-control" id="password" name="password" placeholder="Create your password">
                 </div>
                 <div class="form-group">

@@ -127,7 +127,7 @@ if (!isset($_SESSION['UserID'])) {
 
                 <div class="col-md-7">
                         <div class="container p-4">
-                            <h3 class="mb-4">Search Results</h3>
+                            <h3 id="patientSearchResults" class="mb-4">Search Results</h3>
                                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="patients">
                                 <!-- Cards will be updated dynamically  -->
                                 

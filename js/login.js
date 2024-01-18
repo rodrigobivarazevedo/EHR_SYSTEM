@@ -10,14 +10,13 @@ function login() {
         data: { UsernameOrEmail: UsernameOrEmail, password: password, action: "login"},
         success: function(response) {
             // Check if the login was successful
-            if (response.UserID && response.message ==="Login successful") {
+            if (response.UserID && response.success ==="Login successful") {
                 // Redirect to patient_portal.php with UserID as a query parameter
                 const redirectURL = `/EHR_system/ui/MyFastCARE/doctor_portal.php`;
                 window.location.href = redirectURL;
-            } else {
+            } else if (response.message) {
                 // Handle unsuccessful login (e.g., display an error message)
-                console.log(response.error || response.message);
-                alert("Login failed. Please check your credentials.");
+                alert(response.message);
             }
         },
         error: function(xhr) {
@@ -25,7 +24,7 @@ function login() {
             console.log(xhr.responseText);
             
             // Display a user-friendly error message
-            alert("AJAX request failed. Check the console for details.");
+            alert("Server request failed.");
         }
     });
 } 
@@ -44,6 +43,63 @@ function isValidContactNumber(contactNumber) {
     var contactNumberRegex = /^\d{9}$/;
     return contactNumberRegex.test(contactNumber);
 }
+
+function isStrongPassword(password) {
+    // You can define your own criteria for a strong password, e.g., minimum length, mix of uppercase, lowercase, numbers, and special characters.
+    const minLength = 8;
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasNumbers = /\d/.test(password);
+    const hasSpecialCharacters = /[!@#$%^&*()_\-+=<>?]/.test(password);
+
+    return password.length >= minLength && hasUppercase && hasLowercase && hasNumbers && hasSpecialCharacters;
+}
+
+function generateStrongPassword() {
+    const length = 8; // Adjust the desired password length
+    const uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
+    const numberChars = "0123456789";
+    const specialChars = "!@#$%^&*()_-+=<>?";
+
+    const getRandomChar = (charset) => {
+        const randomIndex = Math.floor(Math.random() * charset.length);
+        return charset.charAt(randomIndex);
+    };
+
+    // Ensure at least one character from each character set
+    let password =
+        getRandomChar(uppercaseChars) +
+        getRandomChar(lowercaseChars) +
+        getRandomChar(numberChars) +
+        getRandomChar(specialChars);
+
+    // Fill the remaining characters with a mix of all character sets
+    for (let i = password.length; i < length; i++) {
+        const allChars = uppercaseChars + lowercaseChars + numberChars + specialChars;
+        password += getRandomChar(allChars);
+    }
+
+    // Shuffle the characters in the password
+    const shuffledPassword = password.split("").sort(() => Math.random() - 0.5).join("");
+    return shuffledPassword;
+}
+
+
+
+function suggestStrongPassword() {
+    const passwordInput = document.getElementById("password");
+    const suggestedPassword = generateStrongPassword();
+
+    const passwordSuggestionDiv = document.getElementById("passwordSuggestion");
+    // Display the suggested password in the HTML element
+    passwordSuggestionDiv.innerHTML = `<p>For a strong password, consider using:</p><p><strong>${suggestedPassword}</strong></p>`;
+    // Prevent multiple submissions
+    var submitButton = document.getElementById("registerButton");
+    submitButton.disabled = false;
+}
+
+
 
     
 function register() {
@@ -76,13 +132,6 @@ function register() {
         return;
     }
 
-    // Check if passwords match
-    if (confirmPassword !== password) {
-        alert("Passwords do not match. Please enter matching passwords.");
-        submitButton.disabled = false;  // Re-enable the submit button
-        return;
-    }
-
     // Check if the email is valid
     if (!isValidEmail(email)) {
         alert("Invalid email address. Please enter a valid email.");
@@ -97,6 +146,24 @@ function register() {
         return;
     }
 
+    // Check if passwords match
+    if (confirmPassword !== password) {
+        alert("Passwords do not match. Please enter matching passwords.");
+        submitButton.disabled = false;  // Re-enable the submit button
+        return;
+    }
+    // Check the strength of the password
+    if (!isStrongPassword(password)) {
+        if (confirm("The password is not very strong. Do you want to generate a strong password?")) {
+            suggestStrongPassword();
+        } 
+        document.getElementById("password").value = "";
+        submitButton.disabled = false;
+        return;
+    }
+
+
+    
     // Perform AJAX call for registration
     $.ajax({
         url: "/EHR_system/ajax/loginAJAX.php",  // Adjust the URL for registration
@@ -116,18 +183,13 @@ function register() {
         },
         success: function (response) {
             // Check if the registration was successful
-            if (response.message) {
+            if (response.success) {
+                // Redirect to a success page or handle as needed
+                alert(response.success);
+                window.location.href = "/EHR_system/ui/MyFastCARE/login.php"; 
+            } else if(response.message) {
                 // Redirect to a success page or handle as needed
                 alert(response.message);
-                window.location.href = "/EHR_system/ui/MyFastCARE/login.php"; 
-            } else {
-                // Check for the specific error message
-                if (response.error && response.error.includes("Username already exists")) {
-                    alert("Username already exists. Please choose a different username.");
-                } else {
-                    // Display a generic error message for other cases
-                    alert(response.error);
-                }
             }
         },
         error: function (xhr) {
@@ -135,7 +197,7 @@ function register() {
             console.log(xhr.responseText);
 
             // Display a user-friendly error message
-            alert("AJAX request failed. Check the console for details.");
+            alert("Server request failed.");
         },
         complete: function () {
             // Re-enable the submit button after the AJAX request completes

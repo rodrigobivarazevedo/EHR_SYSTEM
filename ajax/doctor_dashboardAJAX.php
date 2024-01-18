@@ -23,7 +23,7 @@ if ($action === "get_all_patients") {
     $DoctorID = $statement->fetch(PDO::FETCH_ASSOC);
 
     if (!$DoctorID) {
-        echo json_encode(["error" => "Doctor not found"]);
+        echo json_encode(["message" => "Doctor not found"]);
         exit(); // Terminate script execution after sending the response
     }
 
@@ -77,7 +77,7 @@ if ($action === "get_messages") {
     $dbo = new Database();
     $pdo = new Messages();
 
-    $result = $pdo->get_messages($dbo, $UserID, $action = "doctor");
+    $result = $pdo->get_messages($dbo, $UserID);
 
     // Check if the result is an error
     if (isset($result["error"])) {
@@ -91,14 +91,14 @@ if ($action === "get_messages") {
 
 if ($action === "send_message") {
     $UserID = $_SESSION["UserID"];
-    $patient_name = $_POST["patient_name"];
+    $doctor_name = $_POST["doctor_name"];
     $content = $_POST["content"];
 
     $dbo = new Database();
     $pdo = new Messages();
 
     
-    $nameArray = explode(' ', $patient_name);
+    $nameArray = explode(' ', $doctor_name);
 
     // Check if the array has at least two elements
     if (!count($nameArray) >= 1) {
@@ -109,16 +109,20 @@ if ($action === "send_message") {
     }
 
     $statement = $dbo->conn->prepare(
-        "SELECT UserID FROM users WHERE Username = :username"
+        "SELECT u.UserID FROM users u 
+        JOIN doctors d ON d.UserID = u.UserID
+        WHERE FirstName = :FirstName AND LastName = :LastName"
+        
     );
-    $statement->bindParam(':username', $patient_name, PDO::PARAM_STR);
+    $statement->bindParam(':FirstName', $nameArray[0], PDO::PARAM_STR);
+    $statement->bindParam(':LastName', $nameArray[1], PDO::PARAM_STR);
     
     $statement->execute();
     
     $userID = $statement->fetch(PDO::FETCH_ASSOC);
     
     if (!$userID) {
-        echo json_encode(["error" => "Patient not found"]);
+        echo json_encode(["message" => "Doctor not found"]);
         exit(); // Terminate script execution after sending the response
     }
 

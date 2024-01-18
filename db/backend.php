@@ -22,18 +22,17 @@ class Appointmentsinfo
             $statement->execute();
             // Fetch results
             $appointments = $statement->fetchAll(PDO::FETCH_ASSOC);
-    
-            echo json_encode($appointments);
+            if ($appointments){
+                echo json_encode($appointments);
+            } else{
+                echo json_encode(["message" => "No appointments found"]);
+            }
     
         } catch (PDOException $e) {
             // Handle exceptions, log errors, or return an error message
             echo json_encode(["error" => $e->getMessage()]);
         }
     }
-    
-
-
-
 
 }
 
@@ -76,9 +75,14 @@ class Doctorsinfo
 
             // Fetch results
             $returned_value = $statement->fetchAll(PDO::FETCH_ASSOC);
+            if ($returned_value){
+                // Encode the array as JSON and return it
+                return json_encode($returned_value);
+            } else {
+                echo json_encode(["message" => "Server problems, comeback again"]);
+            }
 
-            // Encode the array as JSON and return it
-            return json_encode($returned_value);
+            
         } catch (PDOException $e) {
             // Handle the exception (e.g., log, display an error message)
             return json_encode(["error" => $e->getMessage()]);
@@ -112,8 +116,12 @@ class Clinicsinfo
             // Fetch results
             $returned_value = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-            // Encode the array as JSON and return it
-            return json_encode($returned_value);
+            if ($returned_value){
+                // Encode the array as JSON and return it
+                return json_encode($returned_value);
+            } else {
+                echo json_encode(["message" => "Server problems, comeback again"]);
+            }
         } catch (PDOException $e) {
             // Handle the exception (e.g., log, display an error message)
             return json_encode(["error" => $e->getMessage()]);
@@ -128,7 +136,7 @@ class All_Info
     {
         try {
             // Ensure that $table is a valid table name (to avoid SQL injection)
-            $validTables = ["Doctors", "appointmentsinfo", "clinics"]; // Add valid table names as needed
+            $validTables = ["Doctors", "clinics"]; // Add valid table names as needed
 
             if (!in_array($table, $validTables)) {
                 throw new Exception("Invalid table name");
@@ -138,7 +146,7 @@ class All_Info
                 $statement = $dbo->conn->prepare("SELECT D.FirstName, D.LastName, D.Speciality, C.Name AS clinic FROM Doctors D
                 LEFT JOIN DoctorClinic DC ON D.DoctorID = DC.DoctorID
                 LEFT JOIN Clinics C ON DC.ClinicID = C.ClinicID");
-            } else {
+            } else if ($table === "clinics"){
                 $statement = $dbo->conn->prepare("SELECT * FROM $table");
 
             } 
@@ -149,8 +157,12 @@ class All_Info
             // Fetch results
             $returned_value = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-            // Encode the array as JSON and return it
-            return json_encode($returned_value);
+            if ($returned_value){
+                // Encode the array as JSON and return it
+                return json_encode($returned_value);
+            } else {
+                echo json_encode(["message" => "Server problems, comeback again"]);
+            }
         } catch (PDOException $e) {
             // Handle the exception (e.g., log, display an error message)
             return json_encode(["error" => $e->getMessage()]);
@@ -166,8 +178,21 @@ class Users{
 
     public function create_user($dbo, $Username, $Password, $Email, $ContactNumber, $FirstName, $LastName, $gender, $birthdate, $speciality) {
         try {
-            $hashed_password = password_hash($Password, PASSWORD_DEFAULT);
+            $checkUserQuery = "SELECT username FROM users WHERE Username = :Username";
     
+            $UserExists = $dbo->conn->prepare($checkUserQuery);
+            $UserExists->bindParam(':Username', $Username, PDO::PARAM_STR);
+            // Execute statement
+            $UserExists->execute();
+
+            // Check the number of rows returned by the SELECT query
+            if ($UserExists->rowCount() > 0) {
+                // Return a custom error message for duplicate username
+                return json_encode(["message" => "Username already exists"]);
+            }
+
+
+            $hashed_password = password_hash($Password, PASSWORD_DEFAULT);
             // Insert into users table
             $insertUserQuery = "INSERT INTO users (Username, Password, Email, ContactNumber) 
                 VALUES (:Username, :hashed_password, :Email, :ContactNumber)";
@@ -200,41 +225,19 @@ class Users{
             $statement->execute();
     
             // Return success message or any other information
-            return json_encode(["message" => "Registration successful"]);
+            return json_encode(["success" => "Registration successful"]);
         } catch (PDOException $e) {
             // Check for unique constraint violation
             if ($e->getCode() == 23000 && strpos($e->getMessage(), 'unique_username') !== false) {
                 // Return a custom error message for duplicate username
-                return json_encode(["error" => "Username already exists"]);
+                return json_encode(["message" => "Username already exists"]);
             } else {
                 // Handle other exceptions or return a generic error message
-                return json_encode(["error" => "An error occurred during registration. Please try again."]);
+                return json_encode(["message" => "An error occurred during registration. Please try again."]);
             }
         }
     }
     
-
-    
-
-
-        public function check_user($dbo, $UsernameOrEmail) {
-            try {
-                
-                // Check if the username or email exists
-                $checkUserStatement = $dbo->conn->prepare("SELECT UserID FROM users WHERE Username = :UsernameOrEmail OR Email = :UsernameOrEmail");
-                $checkUserStatement->bindParam(':UsernameOrEmail', $UsernameOrEmail, PDO::PARAM_STR);
-                $checkUserStatement->execute();
-        
-                $user = $checkUserStatement->fetch(PDO::FETCH_ASSOC);
-        
-                return json_encode($user);
-
-            } catch (PDOException $e) {
-                // Handle the exception (e.g., log, display an error message)
-                return json_encode(["error" => $e->getMessage()]);
-            }
-        }
-
         public function login($dbo, $UsernameOrEmail, $password) {
             try {
                 // Check if the username or email exists
@@ -250,14 +253,14 @@ class Users{
         
                     if (password_verify($password, $hashed_password)) {
                         // Password is correct, user authenticated successfully
-                        return json_encode(["message" => "Login successful", "UserID" => $user["UserID"], "username" => $user["Username"], "role" => $user["Role"]]);
+                        return json_encode(["success" => "Login successful", "UserID" => $user["UserID"], "username" => $user["Username"], "role" => $user["Role"]]);
                     } else {
                         // Incorrect password
-                        return json_encode(["error" => "Invalid login credentials"]);
+                        return json_encode(["message" => "Invalid login credentials"]);
                     }
                 } else {
                     // User not found
-                    return json_encode(["error" => "Invalid login credentials"]);
+                    return json_encode(["message" => "Invalid login credentials"]);
                 }
             } catch (PDOException $e) {
                 // Handle the exception (e.g., log, display an error message)
@@ -267,34 +270,6 @@ class Users{
         
 
 }
-
-class History{
-
-        public function medication($dbo, $UserID)
-    {
-        try {
-            // Check if the username or email exists
-            $statement = $dbo->conn->prepare("SELECT * FROM medicationprescriptions WHERE UserID = :UserID");
-            $statement->bindParam(':UserID', $UserID, PDO::PARAM_STR);
-            $statement->execute();
-
-            $medications = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-            if ($medications) {
-                return json_encode($medications);
-            } else {
-                // No medications found
-                return json_encode(["message" => "No medications found for the user"]);
-            }
-        } catch (PDOException $e) {
-            // Handle the exception (e.g., log, display an error message)
-            return json_encode(["error" => $e->getMessage()]);
-        }
-    }
-
-
-}
-
 
 
 class Messages
@@ -308,7 +283,7 @@ class Messages
 
             // Check if sender and receiver IDs exist in the Users table
             if (!$sender || !$receiver) {
-                return json_encode(["error" => "Sender or receiver not found", "UserID" =>$sender, "DoctorID" =>$receiver]);
+                return json_encode(["message" => "Sender or receiver not found"]);
             }
 
             $statement = $dbo->conn->prepare(
@@ -321,9 +296,9 @@ class Messages
             $result = $statement->execute();
 
             if ($result) {
-                return json_encode(["success" => "Message sent successfully to {$receiver['Username']}"]);
+                return json_encode(["success" => "Message sent successfully to {$receiver['FirstName']} {$receiver['LastName']}"]);
             } else {
-                return json_encode(["error" => "Failed to send the message"]);
+                return json_encode(["message" => "Failed to send the message"]);
             }
         } catch (PDOException $e) {
             return json_encode(["error" => $e->getMessage()]);
@@ -333,7 +308,10 @@ class Messages
     // Helper method to check if a user exists in the Users table
     private function userExists($dbo, $userID)
     {
-        $statement = $dbo->conn->prepare("SELECT UserID, Username FROM Users WHERE UserID = :userID");
+        $statement = $dbo->conn->prepare(
+            "SELECT u.UserID, d.FirstName, d.LastName FROM Users u
+            JOIN doctors d ON d.UserID = u.UserID
+            WHERE u.UserID = :userID");
         $statement->bindParam(':userID', $userID, PDO::PARAM_INT);
         $statement->execute();
 
@@ -341,36 +319,25 @@ class Messages
     }
 
 
-    public function get_messages($dbo, $userID, $action)
+    public function get_messages($dbo, $userID)
     {
         try {
             // Check if the user ID exists in the Users table
             if (!$this->userExists($dbo, $userID)) {
-                return json_encode(["error" => "User not found"]);
+                return json_encode(["message" => "User not found"]);
             }
-            if ($action == "user"){
-
+            
             $statement = $dbo->conn->prepare(
-                "SELECT m.Content, m.Timestamp, d.FirstName, d.LastName FROM Messages m JOIN Doctors d ON m.SenderID = d.UserID WHERE m.ReceiverID = :userID"
+                "SELECT m.Content, m.Timestamp, d.FirstName, d.LastName FROM messages m JOIN doctors d ON m.SenderID = d.UserID WHERE m.ReceiverID = :userID"
             );
             $statement->bindParam(':userID', $userID, PDO::PARAM_INT);
-            } elseif ($action == "doctor"){
-                $statement = $dbo->conn->prepare(
-                    "SELECT m.Content, m.Timestamp, u.username FROM Messages m JOIN Users u ON m.SenderID = u.UserID WHERE m.ReceiverID = :userID"
-                );
-                $statement->bindParam(':userID', $userID, PDO::PARAM_INT);
-            }
-
             $statement->execute();
-
             $messages = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-    
 
             if ($messages) {
                 return json_encode($messages);
             } else {
-                return json_encode(["message" => "No messages found for the user"]);
+                return json_encode(["message" => "No messages found"]);
             }
         } catch (PDOException $e) {
             return json_encode(["error" => $e->getMessage()]);
@@ -388,7 +355,7 @@ class Patients
             // Check if doctorID exists in the Doctors table
             $doctorExists = $this->doctorExists($dbo, $doctorID);
             if (!$doctorExists) {
-                return json_encode(["error" => "Doctor not found"]);
+                return json_encode(["message" => "Doctor not found"]);
             }
 
             $statement = $dbo->conn->prepare(
@@ -409,7 +376,7 @@ class Patients
             if ($result) {
                 return json_encode(["success" => "Patient added successfully"]);
             } else {
-                return json_encode(["error" => "Failed to add patient"]);
+                return json_encode(["message" => "Failed to add patient"]);
             }
         } catch (PDOException $e) {
             return json_encode(["error" => $e->getMessage()]);
@@ -423,7 +390,7 @@ class Patients
         try {
             // Check if the doctor ID exists in the Doctors table
             if (!$this->doctorExists($dbo, $doctorID)) {
-                return json_encode(["error" => "Doctor not found"]);
+                return json_encode(["message" => "Doctor not found"]);
             }
 
             $statement = $dbo->conn->prepare(
@@ -437,7 +404,7 @@ class Patients
             if ($patients) {
                 return json_encode($patients);
             } else {
-                return json_encode(["message" => "No patients found for the doctor"]);
+                return json_encode(["message" => "No patients found"]);
             }
         } catch (PDOException $e) {
             return json_encode(["error" => $e->getMessage()]);
@@ -449,7 +416,7 @@ class Patients
         try {
             // Check if the doctor ID exists in the Doctors table
             if (!$this->doctorExists($dbo, $doctorID)) {
-                return json_encode(["error" => "Doctor not found"]);
+                return json_encode(["message" => "Doctor not found"]);
             }
             $ID = False;
             $firstorlastname=False;
@@ -483,7 +450,7 @@ class Patients
                     $ID = True;
                     break;
                 default:
-                    return json_encode(["error" => "Invalid search parameter"]);
+                    return json_encode(["message" => "Invalid search parameter"]);
             }
             $query .= ")";
 
@@ -517,7 +484,7 @@ class Patients
             if ($patients) {
                 return json_encode($patients);
             } else {
-                return json_encode(["message" => "No patients found for the doctor"]);
+                return json_encode(["message" => "No patients found"]);
             }
         } catch (PDOException $e) {
             return json_encode(["error" => $e->getMessage()]);
@@ -525,18 +492,6 @@ class Patients
     }
 
     
-
-    // Helper method to check if a doctor exists in the Doctors table
-    private function patientExists($dbo, $Email, $ContactNumber)
-    {
-        $statement = $dbo->conn->prepare("SELECT PatientID, UserID FROM patients WHERE Email = :Email and ContactNumber = :ContactNumber");
-        $statement->bindParam(':Email', $Email, PDO::PARAM_STR);
-        $statement->bindParam(':ContactNumber', $ContactNumber, PDO::PARAM_STR);
-        $statement->execute();
-
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
-        return $result !== false;
-    }
     // Helper method to check if a doctor exists in the Doctors table
     private function doctorExists($dbo, $doctorID)
     {
@@ -571,10 +526,10 @@ class Patients
 
             $result = $statement->execute();
             if ($result) {
-                return json_encode(["success" => "Patient updated successfully", "return" => $result]);
+                return json_encode(["success" => "Patient updated successfully"]);
             } else {
                 $errorInfo = $statement->errorInfo();
-                return json_encode(["error" => "Failed to update the patient. Error: " . $errorInfo[2]]);
+                return json_encode(["message" => "Failed to update the patient. Error: " . $errorInfo[2]]);
             }
 
         } catch (PDOException $e) {
@@ -600,7 +555,7 @@ class Patients
             if ($result) {
                 return json_encode(["success" => "Patient deleted successfully"]);
             } else {
-                return json_encode(["error" => "Failed to delete the patient"]);
+                return json_encode(["message" => "Failed to delete the patient"]);
             }
         } catch (PDOException $e) {
             return json_encode(["error" => $e->getMessage()]);

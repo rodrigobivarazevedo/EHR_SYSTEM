@@ -14,7 +14,12 @@ function get_health_record(patientID) {
         dataType: "json", // Changed "JSON" to "json"
         data: { patientID: patientID, action: "search_health_records" },
         success: function(response) {
-            updateCardUI(response)
+            if (response.message) {
+                alert(response.message);
+            }else{
+                updateCardUI(response);
+            }
+           
             
         },
         error: function(xhr) {
@@ -22,7 +27,7 @@ function get_health_record(patientID) {
             console.log(xhr.responseText);
             
             // Display a user-friendly error message
-            alert("AJAX request failed. Check the console for details.");
+            alert("Server request failed.");
         }
     });
 }
@@ -109,7 +114,7 @@ function update_health_record() {
                 console.log(xhr.responseText);
                 
                 // Display a user-friendly error message
-                alert("AJAX request failed. Check the console for details.");
+                alert("Server request failed.");
             }
         });
     }
@@ -165,7 +170,11 @@ function post_health_record(firstName, lastName, email, birthdate, gender, addre
         data: { firstName: firstName, lastName: lastName, email: email, birthdate: birthdate, gender: gender, address: address, contactNumber: contactNumber, action: "create_patient" },
         
         success: function(response) {
-            alert(response);
+            if (response.message) {
+                alert(response.message);
+            }else{
+                alert(response);
+            }
             
         },
         error: function(xhr) {
@@ -173,7 +182,7 @@ function post_health_record(firstName, lastName, email, birthdate, gender, addre
             console.log(xhr.responseText);
             
             // Display a user-friendly error message
-            alert("AJAX request failed. Check the console for details.");
+            alert("Server request failed.");
         }
     });
 }
@@ -231,8 +240,8 @@ function delete_health_record_ajax(patientID) {
                 alert(response.success);
                 // Close the modal after submission
                 $('#deleteModal').modal('hide');
-            } else if (response.error){
-                alert(response.error);
+            } else if (response.message){
+                alert(response.message);
             }
         },
         error: function(xhr) {

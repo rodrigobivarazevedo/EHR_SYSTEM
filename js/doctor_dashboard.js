@@ -12,17 +12,16 @@ function get_all_patients() {
         dataType: "json",
         data: { action: "get_all_patients" },
         success: function(response) {
-            try {
-                console.log(response)
+            if (response.message){
+                document.getElementById('patients').textContent = `${response.message}`;
+            }else{
                 updateCardUI(response)
-            } catch (error) {
-                console.error('Invalid JSON response:', response);
-                alert('Invalid JSON response. Check the console for details.');
             }
+                
         },
         error: function(xhr) {
             console.log(xhr.responseText);
-            alert("AJAX request failed. Check the console for details.");
+            alert("Server request failed.");
         }
     });
 }
@@ -72,27 +71,25 @@ function get_all_patients() {
 function sendMessage() {
     // Add your logic to send the message here
     // For example, you can use AJAX to send the data to the server
-    const recipient = $('#Patient_name').val();
+    const recipient = $('#Doctor_name').val();
     const messageContent = $('#messageContent').val();
 
     $.ajax({
         url: '/EHR_system/ajax/doctor_dashboardAJAX.php',
         type: 'POST',
         dataType: 'json',
-        data: {patient_name: recipient, content: messageContent, action: "send_message"},
+        data: {doctor_name: recipient, content: messageContent, action: "send_message"},
         success: function (sendMessagesData) {
             if(sendMessagesData.success){
                 alert(sendMessagesData.success);
                 // Close the modal after sending the message
                 $('#messageModal').modal('hide');
-            } else if (sendMessagesData.error) {
-                alert(sendMessagesData.error);
-                console.log(sendMessagesData.UserID);
-                console.log(sendMessagesData.DoctorID);
+            } else if (sendMessagesData.message) {
+                alert(sendMessagesData.message);
             }
         },
         error: function (error) {
-            console.error('Error fetching messages:', error);
+            console.error('Error sending messages:', error);
         }
     });
 }
@@ -105,8 +102,12 @@ function loadMessages() {
         dataType: 'json',
         data: {action: "get_messages"},
         success: function (messagesData) {
-            console.log(messagesData)
-            renderMessages(messagesData);
+            if (messagesData.message) {
+                document.getElementById('messages').textContent = `${messagesData.message}`;
+            }else{
+                renderMessages(messagesData);
+            }
+            
         },
         error: function (error) {
             console.error('Error fetching messages:', error);
@@ -122,8 +123,12 @@ function loadAppointments() {
         dataType: 'json',
         data: {action: "appointments"},
         success: function (appointmentsData) {
-            console.log(appointmentsData)
-            renderAppointments(appointmentsData);
+            if (appointmentsData.message) {
+                document.getElementById('appointments').textContent = `${appointmentsData.message}`;
+            }else{
+                renderAppointments(appointmentsData);
+            }
+            
         },
         error: function (error) {
             console.error('Error fetching appointments:', error);
@@ -183,7 +188,7 @@ function renderMessages(data) {
         contentDiv.appendChild(dateParagraph);
 
         const nameParagraph = document.createElement('h6');
-        nameParagraph.textContent = `From: ${item.username} `;
+        nameParagraph.textContent = `From: ${item.FirstName} ${item.LastName}`;
         contentDiv.appendChild(nameParagraph);
 
         

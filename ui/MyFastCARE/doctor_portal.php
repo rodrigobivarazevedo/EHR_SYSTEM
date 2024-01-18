@@ -108,7 +108,7 @@ if (!isset($_SESSION['UserID'])) {
     <div class="tab-content">
         <!-- Appointments Tab Content -->
         <div id="appointmentsTab" class="tab-pane fade show active">
-            <h2 class="mb-5">Appointments</h2>
+            <h2 id="appointments" class="mb-5">Appointments</h2>
             <ul class="list-group">
                 <!-- Data will be populated here dynamically -->
             </ul>
@@ -116,7 +116,7 @@ if (!isset($_SESSION['UserID'])) {
 
         <!-- Documentation Tab Content -->
         <div id="patientsTab" class="tab-pane fade">
-            <h2 class="mb-5">Your Patients</h2>
+            <h2 id="patients" class="mb-5">Your Patients</h2>
             
                 <div class="album py-5 bg-light">
             
@@ -140,7 +140,7 @@ if (!isset($_SESSION['UserID'])) {
 
         <!-- Tests/Exams Tab Content -->
         <div id="messagesTab" class="tab-pane fade">
-            <h2 class="mb-5">Messages</h2>
+            <h2 id ="messages" class="mb-5">Messages</h2>
             <ul class="list-group">
                 <!-- Data will be populated here dynamically -->
             </ul>
@@ -161,8 +161,8 @@ if (!isset($_SESSION['UserID'])) {
         <!-- Add your message form fields here -->
         <form id="sendMessageForm">
           <div class="mb-3">
-            <label for="recipientId" class="form-label">Recipient:</label>
-            <input type="text" class="form-control" id="Patient_name" placeholder="Patients's first and last name..." required>
+            <label for="Doctor_name" class="form-label">Recipient:</label>
+            <input type="text" class="form-control" id="Doctor_name" placeholder="Doctor first and last name..." required>
           </div>
           <div class="mb-3">
             <label for="messageContent" class="form-label">Message:</label>
