@@ -97,9 +97,16 @@ if (!isset($_SESSION['UserID'])) {
             
         </div>
             <div class="input-group mt-3">
-                <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" id="searchQueryID" role="search">
-                <input type="search" class="form-control" id="searchQueryID_input"placeholder="Search by patientID..." aria-label="Search">
+                <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" id="searchPatientID" role="search">
+                <input type="search" class="form-control" id="searchPatientIDInput"placeholder="Search by patientID..." aria-label="Search">
                 </form>
+                
+            </div>
+            <div class="input-group mt-3">
+                <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" id="searchRecordID" role="search">
+                <input type="search" class="form-control" id="searchRecordIDInput"placeholder="Search by RecordID..." aria-label="Search">
+                </form>
+                
             </div>
 
     </div>
@@ -115,7 +122,7 @@ if (!isset($_SESSION['UserID'])) {
 
                 <div class="col-md-7">
                         <div class="container p-4">
-                            <h3 class="mb-4">Search Results</h3>
+                            <h3 id="recordSearchResults" class="mb-4">Search Results</h3>
                                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="records">
                                 <!-- Cards will be updated dynamically  -->
                                 
@@ -253,7 +260,7 @@ if (!isset($_SESSION['UserID'])) {
 
 
 <script src="/EHR_system/global/jquery.js"></script>
-<script src="/EHR_system/js/health_records.js"></script>
+<script src="/EHR_system/js/doctor_health_records.js"></script>
 
 
 </body>

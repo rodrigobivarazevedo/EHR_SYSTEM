@@ -1,25 +1,44 @@
-// Event listener for search patient by ID
-document.getElementById('searchQueryID').addEventListener('input', function () {
-    const patientID = document.getElementById('searchQueryID_input').value;
-    console.log(patientID)
+// Event listener for search by PatientID
+document.getElementById('searchPatientID').addEventListener('input', function () {
+    const patientID = document.getElementById('searchPatientIDInput').value;
+    if (patientID == ""){
+        const content = document.getElementById('records');
+        content.innerHTML = '';
+        return;
+    }
     // Call your AJAX function
-    get_health_record(patientID);
+    get_health_records(patientID);
+});
+
+// Event listener for search by RecordID
+document.getElementById('searchRecordID').addEventListener('input', function () {
+    const recordID = document.getElementById('searchRecordIDInput').value;
+    if (recordID == ""){
+        const content = document.getElementById('records');
+        content.innerHTML = '';
+        return;
+    }
+    // Call your AJAX function
+    get_health_record(recordID);
 });
 
 
-function get_health_record(patientID) {
+function get_health_record(recordID) {
     $.ajax({
-        url: "/EHR_system/ajax/health_recordstAJAX.php",
+        url: "/EHR_system/ajax/health_recordsAJAX.php",
         type: "POST",
         dataType: "json", // Changed "JSON" to "json"
-        data: { patientID: patientID, action: "search_health_records" },
+        data: {InputValue: recordID, parameter: "RecordID", action: "search_health_records" },
         success: function(response) {
+            console.log(response);
             if (response.message) {
-                alert(response.message);
+                document.getElementById('recordSearchResults').textContent = `${response.message}`;
+                const content = document.getElementById('records');
+                content.innerHTML = '';
             }else{
+                document.getElementById('recordSearchResults').textContent = "Search Results";
                 updateCardUI(response);
             }
-           
             
         },
         error: function(xhr) {
@@ -31,6 +50,34 @@ function get_health_record(patientID) {
         }
     });
 }
+
+function get_health_records(patientID) {
+    $.ajax({
+        url: "/EHR_system/ajax/health_recordsAJAX.php",
+        type: "POST",
+        dataType: "json",
+        data: { InputValue: patientID, parameter: "PatientID", action: "search_health_records" },
+        success: function(response) {
+            console.log(response);
+            if (response.message) {
+                document.getElementById('recordSearchResults').textContent = `${response.message}`;
+                const content = document.getElementById('records');
+                content.innerHTML = '';
+            }else{
+                document.getElementById('recordSearchResults').textContent = "Search Results";
+                updateCardUI(response);
+            }
+        },
+        error: function(xhr) {
+            // Log detailed error information to the console
+            console.log(xhr.responseText);
+
+            // Display a user-friendly error message
+            alert("Server request failed.");
+        }
+    });
+}
+
 
 
 function updateCardUI(data) {
@@ -209,7 +256,7 @@ function delete_health_record() {
         },
         error: function(xhr) {
             console.log(xhr.responseText);
-            alert("AJAX request failed. Check the console for details.");
+            alert("Server request failed. Check the console for details.");
         }
     });
 }

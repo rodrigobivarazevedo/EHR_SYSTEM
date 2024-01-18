@@ -23,6 +23,11 @@ function updatePlaceholder() {
 // Event listener for search patient by ID
 document.getElementById('searchQueryID').addEventListener('input', function () {
     const patientID = document.getElementById('searchQueryID_input').value;
+    if (patientID == ""){
+        const content = document.getElementById('patients');
+        content.innerHTML = '';
+        return;
+    }
     // Call your AJAX function
     get_patients("PatientID", patientID);
 });

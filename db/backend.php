@@ -562,10 +562,189 @@ class Patients
         }
     }
 
-    
-
 }
 
 
+class Records
+{
+    public function create_health_record($dbo, $patientID, $doctorID, $dateRecorded, $diagnosis, $medications, $procedures, $comments)
+    {
+        try {
+            // Check if patientID and doctorID exist
+            if (!$this->patientExists($dbo, $patientID) || !$this->doctorExists($dbo, $doctorID)) {
+                return json_encode(["message" => "Patient or Doctor not found"]);
+            }
+
+            $statement = $dbo->conn->prepare(
+                "INSERT INTO HealthRecords (PatientID, DoctorID, DateRecorded, diagnosis, medications, procedures, comments)
+                VALUES (:patientID, :doctorID, :dateRecorded, :diagnosis, :medications, :procedures, :comments)"
+            );
+
+            $statement->bindParam(':patientID', $patientID, PDO::PARAM_INT);
+            $statement->bindParam(':doctorID', $doctorID, PDO::PARAM_INT);
+            $statement->bindParam(':dateRecorded', $dateRecorded, PDO::PARAM_STR);
+            $statement->bindParam(':diagnosis', $diagnosis, PDO::PARAM_STR);
+            $statement->bindParam(':medications', $medications, PDO::PARAM_STR);
+            $statement->bindParam(':procedures', $procedures, PDO::PARAM_STR);
+            $statement->bindParam(':comments', $comments, PDO::PARAM_STR);
+
+            $result = $statement->execute();
+
+            if ($result) {
+                return json_encode(["success" => "Health record added successfully"]);
+            } else {
+                return json_encode(["message" => "Failed to add health record"]);
+            }
+        } catch (PDOException $e) {
+            return json_encode(["error" => $e->getMessage()]);
+        }
+    }
+
+    public function get_all_health_records($dbo, $doctorID, $patientID)
+    {
+        try {
+            // Check if the doctor ID exists in the Doctors table
+            if (!$this->doctorExists($dbo, $doctorID)) {
+                return json_encode(["message" => "Access Denied"]);
+            }
+    
+            $statement = $dbo->conn->prepare(
+                "SELECT * FROM HealthRecords WHERE DoctorID = :doctorID AND PatientID = :patientID"
+            );
+    
+            $statement->bindParam(':doctorID', $doctorID, PDO::PARAM_INT);
+            $statement->bindParam(':patientID', $patientID, PDO::PARAM_INT);
+            $statement->execute();
+    
+            $healthRecords = $statement->fetchAll(PDO::FETCH_ASSOC);
+    
+            if ($healthRecords) {
+                return json_encode($healthRecords);
+            } else {
+                return json_encode(["message" => "No health records found"]);
+            }
+        } catch (PDOException $e) {
+            return json_encode(["error" => $e->getMessage()]);
+        }
+    }
+    
+
+
+    // Helper method to check if a patient exists in the Patients table
+    private function patientExists($dbo, $patientID)
+    {
+        $statement = $dbo->conn->prepare("SELECT PatientID FROM patients WHERE PatientID = :patientID");
+        $statement->bindParam(':patientID', $patientID, PDO::PARAM_INT);
+        $statement->execute();
+
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return $result !== false;
+    }
+
+    // Helper method to check if a doctor exists in the Doctors table
+    private function doctorExists($dbo, $doctorID)
+    {
+        $statement = $dbo->conn->prepare("SELECT DoctorID FROM Doctors WHERE DoctorID = :doctorID");
+        $statement->bindParam(':doctorID', $doctorID, PDO::PARAM_INT);
+        $statement->execute();
+
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return $result !== false;
+    }
+
+    public function get_health_record($dbo, $recordID)
+    {
+        try {
+            $statement = $dbo->conn->prepare(
+                "SELECT * FROM HealthRecords WHERE RecordID = :recordID"
+            );
+
+            $statement->bindParam(':recordID', $recordID, PDO::PARAM_INT);
+            $statement->execute();
+
+            $healthRecord = $statement->fetch(PDO::FETCH_ASSOC);
+
+            if ($healthRecord) {
+                return json_encode($healthRecord);
+            } else {
+                return json_encode(["message" => "Health record not found"]);
+            }
+        } catch (PDOException $e) {
+            return json_encode(["error" => $e->getMessage()]);
+        }
+    }
+
+    public function update_health_record($dbo, $recordID, $newData)
+    {
+        try {
+            // Check if the health record exists
+            if (!$this->healthRecordExists($dbo, $recordID)) {
+                return json_encode(["message" => "Health record not found"]);
+            }
+
+            // Construct the UPDATE query based on the provided data
+            $updateQuery = "UPDATE HealthRecords SET ";
+            foreach ($newData as $key => $value) {
+                $updateQuery .= "$key = :$key, ";
+            }
+            $updateQuery = rtrim($updateQuery, ", "); // Remove the trailing comma and space
+            $updateQuery .= " WHERE RecordID = :recordID";
+
+            $statement = $dbo->conn->prepare($updateQuery);
+
+            // Bind parameters
+            $statement->bindParam(':recordID', $recordID, PDO::PARAM_INT);
+            foreach ($newData as $key => &$value) {
+                // Use bindValue to bind the actual variable, not just its value
+                $statement->bindValue(":$key", $value);
+            }
+
+            $result = $statement->execute();
+            if ($result) {
+                return json_encode(["success" => "Health record updated successfully"]);
+            } else {
+                $errorInfo = $statement->errorInfo();
+                return json_encode(["message" => "Failed to update the health record. Error: " . $errorInfo[2]]);
+            }
+        } catch (PDOException $e) {
+            return json_encode(["error" => $e->getMessage()]);
+        }
+    }
+
+    public function delete_health_record($dbo, $recordID)
+    {
+        try {
+            // Check if the health record exists
+            if (!$this->healthRecordExists($dbo, $recordID)) {
+                return json_encode(["message" => "Health record not found"]);
+            }
+
+            $statement = $dbo->conn->prepare(
+                "DELETE FROM HealthRecords WHERE RecordID = :recordID"
+            );
+            $statement->bindParam(':recordID', $recordID, PDO::PARAM_INT);
+            $result = $statement->execute();
+
+            if ($result) {
+                return json_encode(["success" => "Health record deleted successfully"]);
+            } else {
+                return json_encode(["message" => "Failed to delete the health record"]);
+            }
+        } catch (PDOException $e) {
+            return json_encode(["error" => $e->getMessage()]);
+        }
+    }
+
+    // Helper method to check if a health record exists in the HealthRecords table
+    private function healthRecordExists($dbo, $recordID)
+    {
+        $statement = $dbo->conn->prepare("SELECT RecordID FROM HealthRecords WHERE RecordID = :recordID");
+        $statement->bindParam(':recordID', $recordID, PDO::PARAM_INT);
+        $statement->execute();
+
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return $result !== false;
+    }
+}
 
 ?>

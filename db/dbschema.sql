@@ -1,5 +1,5 @@
 CREATE TABLE HealthRecords (
-    record_id INT PRIMARY KEY,
+    record_id INT PRIMARY KEY AUTO_INCREMENT,
     patient_id INT,
     doctor_id INT,
     date_recorded DATE NOT NULL,
