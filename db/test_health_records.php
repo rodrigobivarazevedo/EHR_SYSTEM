@@ -10,18 +10,15 @@ $dbo = new Database();
 // Create a new instance of the Patients class
 $pdo = new Records();
 
-$recordID = 7;
-$newData = [
-    'patientID' => 4,
-    'doctorID' => 1,
-    'dateRecorded' => '2022-01-01',
-    'diagnosis' => 'arthroesclosis',
-    'medications' => 'brufen',
-    'procedures' => 'no procedure',
-    'comments' => 'patient has severe back pain',
-];
+$patientID = 4;
+$doctorID = 1;
+$dateRecorded = "2022-01-01"; // Added semicolon
+$diagnosis = "diagnosis 3"; // Added semicolon
+$medications = "medications 3"; // Added semicolon
+$procedures = "procedure 3"; // Added semicolon
+$comments = "comment 3"; // Added semicolon
 
 $result = $pdo->update_health_record($dbo, $recordID, $newData);
-echo "test updated: " . $result . "\n";
+echo "New test created: " . $result . "\n";
 
 ?>

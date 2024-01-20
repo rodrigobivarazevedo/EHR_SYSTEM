@@ -74,7 +74,7 @@ if ($action === "update_patient") {
     $Doctor = $statement->fetch(PDO::FETCH_ASSOC);
     
     if (!$Doctor) {
-        echo json_encode(["message" => "Doctor not found"]);
+        echo json_encode(["message" => "Access Denied"]);
         exit(); // Terminate script execution after sending the response
     }
 
@@ -122,7 +122,20 @@ if ($action === "delete_patient") {
     $Doctor = $statement->fetch(PDO::FETCH_ASSOC);
     
     if (!$Doctor) {
-        echo json_encode(["message" => "Doctor not found"]);
+        echo json_encode(["message" => "Access Denied"]);
+        exit(); // Terminate script execution after sending the response
+    }
+
+    $statement = $dbo->conn->prepare(
+        "SELECT DoctorID FROM patients WHERE PatientID = :PatientID"
+    );
+    $statement->bindParam(':PatientID', $patientID, PDO::PARAM_INT);
+    $statement->execute();
+    
+    $isDoctorPatient = $statement->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$isDoctorPatient) {
+        echo json_encode(["message" => "Access denied, patient not yours"]);
         exit(); // Terminate script execution after sending the response
     }
 

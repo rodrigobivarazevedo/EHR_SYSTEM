@@ -31,15 +31,15 @@ $doctorID = $Doctor["DoctorID"];
 
 if ($action === "create_health_record") {
    
-    $firstName = $_POST["firstName"];
-    $lastName = $_POST["lastName"];
-    $email = $_POST["email"];
-    $birthdate = $_POST["birthdate"];
-    $gender = $_POST["gender"];
-    $address = $_POST["address"];
-    $contactNumber = $_POST["contactNumber"];
+    $PatientID = $_POST["PatientID"];
+    $diagnosis = $_POST["Diagnosis"];
+    $medications = $_POST["Medications"];
+    $procedures = $_POST["Procedures"];
+    $comments = $_POST["Comments"];
+    
+    $DateRecorded = date("Y-m-d"); // Format: YYYY-MM-DD
 
-    $result = $pdo->create_health_record($dbo, $doctorID, $firstName, $lastName, $email, $birthdate, $gender, $address, $contactNumber);
+    $result = $pdo->create_health_record($dbo, $PatientID, $doctorID, $DateRecorded, $diagnosis, $medications, $procedures, $comments);
 
     // Check if the result is an error
     if (isset($result["error"])) {
@@ -92,6 +92,20 @@ if ($action === "update_health_record") {
 if ($action === "delete_health_record") {
     
     $recordID = $_POST["recordID"]; // Assuming the parameter is named recordID
+    $PatientID = $_POST["PatientID"];
+
+    $statement = $dbo->conn->prepare(
+        "SELECT DoctorID FROM patients WHERE PatientID = :PatientID"
+    );
+    $statement->bindParam(':PatientID', $PatientID, PDO::PARAM_INT);
+    $statement->execute();
+    
+    $isDoctorPatient = $statement->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$isDoctorPatient) {
+        echo json_encode(["message" => "Access denied, patient not yours"]);
+        exit(); // Terminate script execution after sending the response
+    }
 
     $result = $pdo->delete_health_record($dbo, $recordID);
 

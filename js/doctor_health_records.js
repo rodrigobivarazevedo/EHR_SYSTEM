@@ -136,15 +136,15 @@ function update_health_record() {
 
     if (!PatientID || !RecordID || !DateRecorded || !Diagnosis || !Medications || !Procedures || !Comments) {
         // Display an alert if any required field is empty
-        alert('Please select a Patient.');
+        alert('Please select a Record.');
         return;
     }
 
     // Show a confirmation alert
-    const confirmResult = window.confirm('Are you sure you want to update this record?');
+    const confirmUpdate = window.confirm('Are you sure you want to update this record?');
 
     // Check if the user clicked "OK" in the confirmation alert
-    if (confirmResult) {
+    if (confirmUpdate) {
         $.ajax({
             url: "/EHR_system/ajax/health_recordsAJAX.php",
             type: "POST",
@@ -172,58 +172,47 @@ function update_health_record() {
 
 
 
-function create_health_record() {
-    // Check if all required values are filled
-    firstName = document.getElementById('firstname_create').value;
-    lastName = document.getElementById('lastname_create').value;
-    email = document.getElementById('patientEmail_create').value;
-    birthdate = document.getElementById('patientBirthdate_create').value;
-    gender = document.getElementById('patientGender_create').value;
-    address = document.getElementById('patientAddress_create').value;
-    contactNumber = document.getElementById('patientContactNumber_create').value;
+function createRecord() {
+    PatientID = document.getElementById('PatientID_create').value;
+    Diagnosis = document.getElementById('Diagnosis_create').value;
+    Medications = document.getElementById('Medications_create').value;
+    Procedures = document.getElementById('Procedures_create').value;
+    Comments = document.getElementById('Comments_create').value;
 
-    if (!firstName || !lastName || !email || !birthdate || !gender || !address || !contactNumber) {
+    if (!PatientID || !Diagnosis || !Medications || !Procedures || !Comments) {
         // Display an alert if any required field is empty
         alert('Please fill in all required fields.');
         return;
     }
 
+    
     // Show a confirmation alert
-    const confirmResult = window.confirm('Are you sure you want to create this patient?');
+    const confirmcreate = window.confirm('Are you sure you want to create this record?');
 
     // Check if the user clicked "OK" in the confirmation alert
-    if (confirmResult) {
+    if (confirmcreate) {
         // Event listener for form submission
-        document.getElementById('createPatientForm').addEventListener('submit', function (event) {
-            event.preventDefault();
-            // Implement your logic for creating a patient
-            
-            const address = document.getElementById('patientAddress').value;
-            const contactNumber = document.getElementById('patientContactNumber').value;
-            // Add more patient data properties as needed
-
-            post_patient(firstName, lastName, email, birthdate, gender, address, contactNumber);
-            console.log('Creating patient:', patientData);
-            // You may submit the form via AJAX or perform other actions
-
-            // Close the modal after submission
-            $('#createPatientModal').modal('hide');
-        });
+        create_health_record(PatientID, Diagnosis, Medications, Procedures, Comments);
+      
     }
 }
 
-function post_health_record(firstName, lastName, email, birthdate, gender, address, contactNumber) {
+function create_health_record(PatientID, Diagnosis, Medications, Procedures, Comments) {
     $.ajax({
-        url: "/EHR_system/ajax/doctor_patientAJAX.php",
+        url: "/EHR_system/ajax/health_recordsAJAX.php",
         type: "POST",
         dataType: "json", // Changed "JSON" to "json"
-        data: { firstName: firstName, lastName: lastName, email: email, birthdate: birthdate, gender: gender, address: address, contactNumber: contactNumber, action: "create_patient" },
-        
+        data: { PatientID : PatientID, Diagnosis: Diagnosis, Medications: Medications, Procedures: Procedures, Comments: Comments, action: "create_health_record" },
         success: function(response) {
-            if (response.message) {
+            if (response.success){
+                alert(response.success);
+                // Get the form element and reset it
+                var createRecordForm = document.getElementById('createRecordForm');
+                createRecordForm.reset();
+                // Close the modal
+                $('#createRecordModal').modal('hide');
+            } else if(response.message){
                 alert(response.message);
-            }else{
-                alert(response);
             }
             
         },
@@ -240,22 +229,28 @@ function post_health_record(firstName, lastName, email, birthdate, gender, addre
 
 function delete_health_record() {
     // Check if all required values are filled
-    const patientID = document.getElementById('patientID').value;
-    if (!patientID) {
+    let PatientID = document.getElementById('DeletePatientID').value;
+    let RecordID = document.getElementById('DeleteRecordID').value;
+    if (!PatientID) {
         // Display an alert if any required field is empty
         alert('Please enter patient ID.');
         return;
     }
+    if (!RecordID) {
+        // Display an alert if any required field is empty
+        alert('Please enter record ID.');
+        return;
+    }
 
     $.ajax({
-        url: "/EHR_system/ajax/doctor_patientAJAX.php",
+        url: "/EHR_system/ajax/health_recordsAJAX.php",
         type: "POST",
         dataType: "json",
-        data: { parameter: "PatientID", searchQueryInputValue: patientID, action: "search_patients" },
+        data: { parameter: "PatientID", searchQueryInputValue: PatientID, action: "delete_health_record" },
         success: function(response) {
             const FirstName = response[0].FirstName; 
             const LastName = response[0].LastName;
-            confirmation(FirstName, LastName, patientID);
+            confirmation(FirstName, LastName, patientID, RecordID);
         },
         error: function(xhr) {
             console.log(xhr.responseText);
@@ -264,27 +259,27 @@ function delete_health_record() {
     });
 }
 
-function confirmation(firstName, lastName, patientID) {
-    const confirmResult = window.confirm(`Are you sure you want to delete ${firstName} ${lastName}?`);
+function confirmation(firstName, lastName, patientID, RecordID) {
+    const confirmDelete = window.confirm(`Are you sure you want to delete ${firstName} ${lastName} record?`);
 
-    if (confirmResult) {
+    if (confirmDelete) {
         // Trigger the form submission
-        delete_patient_ajax(patientID);
+        delete_patient_ajax(patientID, RecordID);
     }
 }
 
 // Event listener for form submission
-document.getElementById('deletePatientForm').addEventListener('submit', function (event) {
+document.getElementById('deleteRecordForm').addEventListener('submit', function (event) {
     event.preventDefault();
     // Handle form submission if needed
 });
 
-function delete_health_record_ajax(patientID) {
+function delete_health_record_ajax(PatientID, RecordID) {
     $.ajax({
         url: "/EHR_system/ajax/doctor_patientAJAX.php",
         type: "POST",
         dataType: "json",
-        data: { patientID: patientID, action: "delete_patient" },
+        data: { PatientID: PatientID, RecordID: RecordID, action: "delete_patient" },
         success: function(response) {
             if (response.success){
                 alert(response.success);

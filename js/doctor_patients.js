@@ -145,10 +145,10 @@ function update_patient() {
     }
 
     // Show a confirmation alert
-    const confirmResult = window.confirm('Are you sure you want to update this patient?');
+    const confirmUpdate = window.confirm('Are you sure you want to update this patient?');
 
     // Check if the user clicked "OK" in the confirmation alert
-    if (confirmResult) {
+    if (confirmUpdate) {
         $.ajax({
             url: "/EHR_system/ajax/doctor_patientAJAX.php",
             type: "POST",
@@ -192,10 +192,10 @@ function createPatient() {
     }
 
     // Show a confirmation alert
-    const confirmResult = window.confirm('Are you sure you want to create this patient?');
+    const confirmCreate = window.confirm('Are you sure you want to create this patient?');
 
     // Check if the user clicked "OK" in the confirmation alert
-    if (confirmResult) {    
+    if (confirmCreate) {    
         create_patient(firstName, lastName, email, birthdate, gender, address, contactNumber);     
     }
 }
@@ -261,9 +261,9 @@ function deletePatient() {
 }
 
 function confirmation(firstName, lastName, patientID) {
-    const confirmResult = window.confirm(`Are you sure you want to delete ${firstName} ${lastName}?`);
+    const confirmDelete = window.confirm(`Are you sure you want to delete ${firstName} ${lastName}?`);
 
-    if (confirmResult) {
+    if (confirmDelete) {
         // Trigger the form submission
         delete_patient_ajax(patientID);
     }

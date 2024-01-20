@@ -638,7 +638,7 @@ class Records
         $statement->execute();
 
         $result = $statement->fetch(PDO::FETCH_ASSOC);
-        return $result !== false;
+        return $result;
     }
 
     // Helper method to check if a doctor exists in the Doctors table

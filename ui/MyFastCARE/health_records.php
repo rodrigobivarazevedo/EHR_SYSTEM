@@ -76,8 +76,8 @@ if (!isset($_SESSION['UserID'])) {
             
 
             <div class="text-end">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Record</button>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#messageModal">Add New Record</button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteRecordModal">Delete Record</button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createRecordModal">Add New Record</button>
 
             </div>
             
@@ -137,7 +137,7 @@ if (!isset($_SESSION['UserID'])) {
                     <div class="container p-4">
                     <h3 class="mb-4" id="editTitle">Edit Record</h3>
                             <!-- Record edit Form -->
-                            <form id="updatePatientForm" class="mt-3">
+                            <form id="updateRecordForm" class="mt-3">
                                 <div class="mb-3">
                                     <label for="RecordID_update" class="form-label">Record ID:</label>
                                     <input type="text" class="form-control" id="RecordID_update" placeholder="Enter record ID" required>
@@ -179,11 +179,11 @@ if (!isset($_SESSION['UserID'])) {
         </div>
             
     <!-- Create Record Modal -->
-<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+<div class="modal fade" id="createRecordModal" tabindex="-1" aria-labelledby="createRecordModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title" id="messageModalLabel">Create a New Health Record</h3>
+        <h3 class="modal-title" id="createRecordModalLabel">Create a New Health Record</h3>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -194,27 +194,27 @@ if (!isset($_SESSION['UserID'])) {
                     <input type="text" class="form-control" id="PatientID_create" placeholder="Enter patient ID" required>
                 </div>
                 <div class="mb-3">
-                    <label for="diagnosis_create" class="form-label">Diagnosis:</label>
-                    <textarea class="form-control" id="diagnosis_create" placeholder="Enter diagnosis" rows="4"></textarea>
+                    <label for="Diagnosis_create" class="form-label">Diagnosis:</label>
+                    <textarea class="form-control" id="Diagnosis_create" placeholder="Enter diagnosis" rows="4"></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="medications_create" class="form-label">Medications:</label>
-                    <textarea class="form-control" id="medications_create" placeholder="Enter medications"></textarea>
+                    <label for="Medications_create" class="form-label">Medications:</label>
+                    <textarea class="form-control" id="Medications_create" placeholder="Enter medications"></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="procedures_create" class="form-label">Procedures:</label>
-                    <textarea class="form-control" id="procedures_create" placeholder="Enter procedures"></textarea>
+                    <label for="Procedures_create" class="form-label">Procedures:</label>
+                    <textarea class="form-control" id="Procedures_create" placeholder="Enter procedures"></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="comments_create" class="form-label">Comments:</label>
-                    <textarea class="form-control" id="comments_create" placeholder="Enter comments" rows="4"></textarea>
+                    <label for="Comments_create" class="form-label">Comments:</label>
+                    <textarea class="form-control" id="Comments_create" placeholder="Enter comments" rows="4"></textarea>
                 </div>
                 <!-- Add more health record fields as needed -->
             </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-secondary" onclick="create_health_record()">Create Record</button>
+        <button type="button" class="btn btn-secondary" onclick="createRecord()">Create Record</button>
       </div>
     </div>
   </div>
@@ -230,14 +230,14 @@ if (!isset($_SESSION['UserID'])) {
       </div>
       <div class="modal-body">
             <!-- Record Delete Form -->
-            <form id="deletePatientForm" class="mt-3">
+            <form id="deleteRecordForm" class="mt-3">
                 <div class="mb-3">
-                    <label for="patientID" class="form-label">Patient ID:</label>
-                    <input type="text" class="form-control" id="patientID" placeholder="Enter patient ID" required>
+                    <label for="delete_patientID" class="form-label">Patient ID:</label>
+                    <input type="text" class="form-control" id="delete_patientID" placeholder="Enter patient ID" required>
                 </div>
                 <div class="mb-3">
-                    <label for="recordID" class="form-label">Record ID:</label>
-                    <input type="text" class="form-control" id="recordID" placeholder="Enter record ID" required>
+                    <label for="delete_recordID" class="form-label">Record ID:</label>
+                    <input type="text" class="form-control" id="delete_recordID" placeholder="Enter record ID" required>
                 </div>
             </form>
       </div>
