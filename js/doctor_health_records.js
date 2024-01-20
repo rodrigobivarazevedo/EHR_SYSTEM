@@ -30,7 +30,6 @@ function get_health_record(recordID) {
         dataType: "json", // Changed "JSON" to "json"
         data: {InputValue: recordID, parameter: "RecordID", action: "search_health_records" },
         success: function(response) {
-            console.log(response);
             if (response.message) {
                 document.getElementById('recordSearchResults').textContent = `${response.message}`;
                 const content = document.getElementById('records');
@@ -58,7 +57,6 @@ function get_health_records(patientID) {
         dataType: "json",
         data: { InputValue: patientID, parameter: "PatientID", action: "search_health_records" },
         success: function(response) {
-            console.log(response);
             if (response.message) {
                 document.getElementById('recordSearchResults').textContent = `${response.message}`;
                 const content = document.getElementById('records');
@@ -96,7 +94,8 @@ function updateCardUI(data) {
                       
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary" id="view-edit-btn" onclick="edit_health_record("${record.PatientID}",'${record.RecordID}', '${record.DateRecorded}', '${record.Diagnosis}', '${record.Medications}', '${record.Procedures}', '${record.Comments}')">View/Edit</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="view-edit-btn" onclick="edit_health_record('${record.PatientID}','${record.RecordID}','${record.DateRecorded}','${record.diagnosis}','${record.medications}','${record.procedures}','${record.comments}')">View/Edit</button>
+
                             </div>
                         </div>
                     </div>
@@ -113,47 +112,51 @@ function updateCardUI(data) {
 
 function edit_health_record(PatientID, RecordID, DateRecorded, Diagnosis, Medications, Procedures, Comments) {
     // Populate the form fields with the patient information
-    document.getElementById('editTitle').value = `Edit PatientID: ${PatientID}, Record: ${RecordID}`;
-    document.getElementById('PatientID').value = PatientID;
-    document.getElementById('firstname').value = firstName;
-    document.getElementById('lastname').value = lastName;
-    document.getElementById('patientEmail').value = email;
-    document.getElementById('patientBirthdate').value = birthdate;
-    document.getElementById('patientGender').value = gender;
-    document.getElementById('patientAddress').value = address;
-    document.getElementById('patientContactNumber').value = contactNumber;
-
-    // Optionally, you can perform additional actions related to editing a patient
+    document.getElementById('editTitle').textContent = `Edit RecordID: ${RecordID} from PatientID: ${PatientID}`;
+    document.getElementById('PatientID_update').value = PatientID;
+    document.getElementById('RecordID_update').value = RecordID;
+    document.getElementById('DateRecorded_update').value = DateRecorded;
+    document.getElementById('Diagnosis_update').value = Diagnosis;
+    document.getElementById('Medications_update').value = Medications;
+    document.getElementById('Procedures_update').value = Procedures;
+    document.getElementById('Comments_update').value = Comments;
+   
+   
 }
 
 
 function update_health_record() {
     PatientID = document.getElementById('PatientID_update').value;
-    firstName = document.getElementById('firstname_update').value;
-    lastName = document.getElementById('lastname_update').value;
-    email = document.getElementById('patientEmail_update').value;
-    birthdate = document.getElementById('patientBirthdate_update').value;
-    gender = document.getElementById('patientGender_update').value;
-    address = document.getElementById('patientAddress_update').value;
-    contactNumber = document.getElementById('patientContactNumber_update').value;
-    if (!firstName || !lastName || !email || !birthdate || !gender || !address || !contactNumber) {
+    RecordID = document.getElementById('RecordID_update').value;
+    DateRecorded = document.getElementById('DateRecorded_update').value;
+    Diagnosis = document.getElementById('Diagnosis_update').value;
+    Medications = document.getElementById('Medications_update').value;
+    Procedures = document.getElementById('Procedures_update').value;
+    Comments = document.getElementById('Comments_update').value;
+
+    if (!PatientID || !RecordID || !DateRecorded || !Diagnosis || !Medications || !Procedures || !Comments) {
         // Display an alert if any required field is empty
         alert('Please select a Patient.');
         return;
     }
 
     // Show a confirmation alert
-    const confirmResult = window.confirm('Are you sure you want to update this patient?');
+    const confirmResult = window.confirm('Are you sure you want to update this record?');
 
     // Check if the user clicked "OK" in the confirmation alert
     if (confirmResult) {
         $.ajax({
-            url: "/EHR_system/ajax/doctor_patientAJAX.php",
+            url: "/EHR_system/ajax/health_recordsAJAX.php",
             type: "POST",
             dataType: "json", // Changed "JSON" to "json"
-            data: { firstName: firstName, lastName: lastName, email: email, birthdate: birthdate, gender: gender, address: address, contactNumber: contactNumber, action: "update_patient" },
+            data: { PatientID : PatientID, RecordID: RecordID, DateRecorded: DateRecorded, Diagnosis: Diagnosis, Medications: Medications, Procedures: Procedures, Comments: Comments, action: "update_health_record" },
             success: function(response) {
-                alert(response);
+                if (response.success){
+                    alert(response.success);
+                    location.reload();
+                } else if(response.message){
+                    alert(response.message);
+                }
                 
             },
             error: function(xhr) {

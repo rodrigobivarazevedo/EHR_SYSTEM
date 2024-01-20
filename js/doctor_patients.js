@@ -138,7 +138,7 @@ function update_patient() {
     gender = document.getElementById('patientGender_update').value;
     address = document.getElementById('patientAddress_update').value;
     contactNumber = document.getElementById('patientContactNumber_update').value;
-    if (!firstName || !lastName || !email || !birthdate || !gender || !address || !contactNumber) {
+    if (!PatientID || !firstName || !lastName || !email || !birthdate || !gender || !address || !contactNumber) {
         // Display an alert if any required field is empty
         alert('Please select a Patient or make sure no fields are empty');
         return;

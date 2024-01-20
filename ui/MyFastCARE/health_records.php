@@ -139,8 +139,8 @@ if (!isset($_SESSION['UserID'])) {
                             <!-- Record edit Form -->
                             <form id="updatePatientForm" class="mt-3">
                                 <div class="mb-3">
-                                    <label for="recordID_update" class="form-label">Record ID:</label>
-                                    <input type="text" class="form-control" id="recordID_update" placeholder="Enter record ID" required>
+                                    <label for="RecordID_update" class="form-label">Record ID:</label>
+                                    <input type="text" class="form-control" id="RecordID_update" placeholder="Enter record ID" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="PatientID_update" class="form-label">Patient ID:</label>
@@ -148,24 +148,24 @@ if (!isset($_SESSION['UserID'])) {
                                 </div>
                                 <!-- Additional Health Record Information -->
                                 <div class="mb-3">
-                                    <label for="recordDate_update" class="form-label">Date Recorded:</label>
-                                    <input type="date" class="form-control" id="recordDate_update" required>
+                                    <label for="DateRecorded_update" class="form-label">Date Recorded:</label>
+                                    <input type="date" class="form-control" id="DateRecorded_update" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="diagnosis_update" class="form-label">Diagnosis:</label>
-                                    <textarea class="form-control" id="diagnosis_update" placeholder="Enter diagnosis" rows="4"></textarea>
+                                    <label for="Diagnosis_update" class="form-label">Diagnosis:</label>
+                                    <textarea class="form-control" id="Diagnosis_update" placeholder="Enter diagnosis" rows="4"></textarea>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="medications_update" class="form-label">Medications:</label>
-                                    <textarea class="form-control" id="medications_update" placeholder="Enter medications"></textarea>
+                                    <label for="Medications_update" class="form-label">Medications:</label>
+                                    <textarea class="form-control" id="Medications_update" placeholder="Enter medications"></textarea>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="procedures_update" class="form-label">Procedures:</label>
-                                    <textarea class="form-control" id="procedures_update" placeholder="Enter procedures"></textarea>
+                                    <label for="Procedures_update" class="form-label">Procedures:</label>
+                                    <textarea class="form-control" id="Procedures_update" placeholder="Enter procedures"></textarea>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="comments_update" class="form-label">Comments:</label>
-                                    <textarea class="form-control" id="comments_update" placeholder="Enter comments" rows="4"></textarea>
+                                    <label for="Comments_update" class="form-label">Comments:</label>
+                                    <textarea class="form-control" id="Comments_update" placeholder="Enter comments" rows="4"></textarea>
                                 </div>
                                 <!-- Add more health record fields as needed -->
                             </form>
@@ -178,7 +178,7 @@ if (!isset($_SESSION['UserID'])) {
             </div>
         </div>
             
-    <!-- Create Patient Modal -->
+    <!-- Create Record Modal -->
 <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -187,7 +187,7 @@ if (!isset($_SESSION['UserID'])) {
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-            <!-- Patient Creation Form -->
+            <!-- Record creation Form -->
             <form id="createRecordForm" class="mt-3">
                 <div class="mb-3">
                     <label for="PatientID_create" class="form-label">Patient ID:</label>
@@ -220,7 +220,7 @@ if (!isset($_SESSION['UserID'])) {
   </div>
 </div>
 
-    <!-- Delete Patient Modal -->
+    <!-- Delete Record Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">

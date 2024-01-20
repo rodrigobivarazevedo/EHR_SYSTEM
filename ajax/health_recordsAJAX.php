@@ -52,19 +52,32 @@ if ($action === "create_health_record") {
 }
 
 if ($action === "update_health_record") {
-    
+
+    $PatientID = $_POST["PatientID"];
+    $RecordID = $_POST["RecordID"];
     $newData = [
-        'PatientID' => $_POST["PatientID"],
         'DateRecorded' => $_POST["DateRecorded"],
-        'RecordID' => $_POST["RecordID"],
-        'diagnosis' => $_POST["diagnosis"],
-        'medications' => $_POST["medications"],
-        'procedures' => $_POST["procedures"],
-        'comments' => $_POST["comments"],
+        'diagnosis' => $_POST["Diagnosis"],
+        'medications' => $_POST["Medications"],
+        'procedures' => $_POST["Procedures"],
+        'comments' => $_POST["Comments"],
     
     ];
-    	
-    $result = $pdo->update_health_record($dbo, $newData);
+
+    $statement = $dbo->conn->prepare(
+        "SELECT DoctorID FROM patients WHERE PatientID = :PatientID"
+    );
+    $statement->bindParam(':PatientID', $PatientID, PDO::PARAM_INT);
+    $statement->execute();
+    
+    $isDoctorPatient = $statement->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$isDoctorPatient) {
+        echo json_encode(["message" => "Access denied, patient not yours"]);
+        exit(); // Terminate script execution after sending the response
+    }
+   
+    $result = $pdo->update_health_record($dbo, $RecordID, $newData);
 
     // Check if the result is an error
     if (isset($result["error"])) {
