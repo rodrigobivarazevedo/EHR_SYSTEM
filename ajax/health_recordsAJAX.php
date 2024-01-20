@@ -98,7 +98,7 @@ if ($action === "search_health_records") {
     $input = $_POST["InputValue"];
 
     if ($parameter == "RecordID"){
-        $result = $pdo->get_health_record($dbo, $input);
+        $result = $pdo->get_health_record($dbo, $input, $doctorID);
     } else if ($parameter == "PatientID"){
         $result = $pdo->get_all_health_records($dbo, $doctorID, $input);
     }

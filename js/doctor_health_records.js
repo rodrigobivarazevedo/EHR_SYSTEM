@@ -90,9 +90,9 @@ function updateCardUI(data) {
             <div class="col">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <h5 class="card-title">ID: ${record.RecordID} ${record.DateRecorded}</h5>
-                        <p class="card-text">Patient: ${record.PatientID}</p>
-                        <p class="card-text">Diagnosis: ${record.Diagnosis}</p>
+                        <h5 class="card-title">ID: ${record.RecordID} Date: ${record.DateRecorded}</h5>
+                        <p class="card-text">PatientID: ${record.PatientID}</p>
+                        <p class="card-text">Diagnosis: ${record.diagnosis}</p>
                       
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">

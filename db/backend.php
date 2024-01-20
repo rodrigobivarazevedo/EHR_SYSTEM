@@ -652,22 +652,25 @@ class Records
         return $result !== false;
     }
 
-    public function get_health_record($dbo, $recordID)
+    public function get_health_record($dbo, $recordID, $doctorID)
     {
         try {
             $statement = $dbo->conn->prepare(
-                "SELECT * FROM HealthRecords WHERE RecordID = :recordID"
+                "SELECT * FROM HealthRecords WHERE RecordID = :recordID AND DoctorID = :doctorID"
             );
 
             $statement->bindParam(':recordID', $recordID, PDO::PARAM_INT);
+            $statement->bindParam(':doctorID', $doctorID, PDO::PARAM_INT);
             $statement->execute();
 
             $healthRecord = $statement->fetch(PDO::FETCH_ASSOC);
 
             if ($healthRecord) {
-                return json_encode($healthRecord);
+                // Wrap the single record in an array
+                $healthRecordsArray = array($healthRecord);
+                return json_encode($healthRecordsArray);
             } else {
-                return json_encode(["message" => "Health record not found"]);
+                return json_encode(["message" => "Health record not found or not your patient"]);
             }
         } catch (PDOException $e) {
             return json_encode(["error" => $e->getMessage()]);
