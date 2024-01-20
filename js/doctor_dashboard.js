@@ -13,7 +13,7 @@ function get_all_patients() {
         data: { action: "get_all_patients" },
         success: function(response) {
             if (response.message){
-                document.getElementById('patients').textContent = `${response.message}`;
+                document.getElementById('doctor_patients').textContent = `${response.message}`;
             }else{
                 updateCardUI(response)
             }

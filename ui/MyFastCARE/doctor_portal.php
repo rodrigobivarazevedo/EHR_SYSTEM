@@ -116,7 +116,7 @@ if (!isset($_SESSION['UserID'])) {
 
         <!-- Documentation Tab Content -->
         <div id="patientsTab" class="tab-pane fade">
-            <h2 id="patients" class="mb-5">Your Patients</h2>
+            <h2 id="doctor_patients" class="mb-5">Your Patients</h2>
             
                 <div class="album py-5 bg-light">
             
@@ -129,7 +129,6 @@ if (!isset($_SESSION['UserID'])) {
                                 <option value="Other">Other</option>
                             </select>
                         </div>
-                        <div id="calendar" class="container mt-5 mb-3"> </div>
                         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="patients">
                         <!-- Cards will be updated dynamically  -->
                         
