@@ -227,7 +227,7 @@ function create_health_record(PatientID, Diagnosis, Medications, Procedures, Com
 }
 
 
-function delete_health_record() {
+function deleteRecord() {
     // Check if all required values are filled
     let PatientID = document.getElementById('DeletePatientID').value;
     let RecordID = document.getElementById('DeleteRecordID').value;
@@ -243,14 +243,14 @@ function delete_health_record() {
     }
 
     $.ajax({
-        url: "/EHR_system/ajax/health_recordsAJAX.php",
+        url: "/EHR_system/ajax/doctor_patientAJAX.php",
         type: "POST",
         dataType: "json",
-        data: { parameter: "PatientID", searchQueryInputValue: PatientID, action: "delete_health_record" },
+        data: { parameter: "PatientID", searchQueryInputValue: PatientID, action: "search_patients" },
         success: function(response) {
             const FirstName = response[0].FirstName; 
             const LastName = response[0].LastName;
-            confirmation(FirstName, LastName, patientID, RecordID);
+            confirmation(FirstName, LastName, PatientID, RecordID);
         },
         error: function(xhr) {
             console.log(xhr.responseText);
@@ -259,31 +259,27 @@ function delete_health_record() {
     });
 }
 
-function confirmation(firstName, lastName, patientID, RecordID) {
+function confirmation(firstName, lastName, PatientID, RecordID) {
     const confirmDelete = window.confirm(`Are you sure you want to delete ${firstName} ${lastName} record?`);
 
     if (confirmDelete) {
         // Trigger the form submission
-        delete_patient_ajax(patientID, RecordID);
+        delete_health_record(PatientID, RecordID);
     }
 }
 
-// Event listener for form submission
-document.getElementById('deleteRecordForm').addEventListener('submit', function (event) {
-    event.preventDefault();
-    // Handle form submission if needed
-});
-
-function delete_health_record_ajax(PatientID, RecordID) {
+function delete_health_record(PatientID, RecordID) {
     $.ajax({
         url: "/EHR_system/ajax/doctor_patientAJAX.php",
         type: "POST",
         dataType: "json",
-        data: { PatientID: PatientID, RecordID: RecordID, action: "delete_patient" },
+        data: { PatientID: PatientID, RecordID: RecordID, action: "delete_health_record" },
         success: function(response) {
             if (response.success){
                 alert(response.success);
                 // Close the modal after submission
+                var deleteRecordForm = document.getElementById('deleteRecordForm');
+                deleteRecordForm.reset();
                 $('#deleteModal').modal('hide');
             } else if (response.message){
                 alert(response.message);
@@ -291,7 +287,7 @@ function delete_health_record_ajax(PatientID, RecordID) {
         },
         error: function(xhr) {
             console.log(xhr.responseText);
-            alert("AJAX request failed. Check the console for details.");
+            alert("Server request failed.");
         }
     });
 }

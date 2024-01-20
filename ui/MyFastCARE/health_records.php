@@ -76,7 +76,7 @@ if (!isset($_SESSION['UserID'])) {
             
 
             <div class="text-end">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteRecordModal">Delete Record</button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Record</button>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createRecordModal">Add New Record</button>
 
             </div>
@@ -232,18 +232,18 @@ if (!isset($_SESSION['UserID'])) {
             <!-- Record Delete Form -->
             <form id="deleteRecordForm" class="mt-3">
                 <div class="mb-3">
-                    <label for="delete_patientID" class="form-label">Patient ID:</label>
-                    <input type="text" class="form-control" id="delete_patientID" placeholder="Enter patient ID" required>
+                    <label for="DeletePatientID" class="form-label">Patient ID:</label>
+                    <input type="text" class="form-control" id="DeletePatientID" placeholder="Enter patient ID" required>
                 </div>
                 <div class="mb-3">
-                    <label for="delete_recordID" class="form-label">Record ID:</label>
-                    <input type="text" class="form-control" id="delete_recordID" placeholder="Enter record ID" required>
+                    <label for="DeleteRecordID" class="form-label">Record ID:</label>
+                    <input type="text" class="form-control" id="DeleteRecordID" placeholder="Enter record ID" required>
                 </div>
             </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-secondary" onclick="delete_health_record()">Delete Record</button>
+        <button type="button" class="btn btn-secondary" onclick="deleteRecord()">Delete Record</button>
       </div>
     </div>
   </div>

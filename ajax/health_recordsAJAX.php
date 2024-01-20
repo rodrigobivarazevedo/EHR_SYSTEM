@@ -91,7 +91,7 @@ if ($action === "update_health_record") {
 
 if ($action === "delete_health_record") {
     
-    $recordID = $_POST["recordID"]; // Assuming the parameter is named recordID
+    $recordID = $_POST["RecordID"]; // Assuming the parameter is named recordID
     $PatientID = $_POST["PatientID"];
 
     $statement = $dbo->conn->prepare(
