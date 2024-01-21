@@ -139,15 +139,21 @@ if (!isset($_SESSION['UserID'])) {
                         <div class="container p-4">
                         <h3 class="mb-4" id="loginTitle">Reset Password</h3>
                                 <!-- Update login data Form -->
-                                <form id="updateLoginForm" class="mt-3">
-                                    <form method="post" action="/forgot-password">
-                                        <div class="form-group">
-                                            <label for="forgotEmail" class="form-label">Enter your email address to reset your password:</label>
-                                            <input type="text" class="form-control" id="forgotEmail" name="forgotEmail" placeholder="Enter your email">
+                                <form id="resetPasswordForm" class="mt-3">
+                                        <div class="mb-3">
+                                            <label for="old_password" class="form-label">Old Password:</label>
+                                            <input type="password" class="form-control" id="old_password" placeholder="Enter old password" required>
                                         </div>
-                                    </form>
+                                        <div class="mb-3">
+                                            <label for="new_password" class="form-label">Email:</label>
+                                            <input type="password" class="form-control" id="new_password" placeholder="Enter new password" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="confirm_password" class="form-label">Contact Number:</label>
+                                            <input type="password" class="form-control" id="confirm_password" placeholder="Confirm new password" required>
+                                        </div>
                                 </form>
-                                <button type="button" class="btn btn-primary mt-3" onclick="update_password()">Reset Password</button>
+                                <button type="button" class="btn btn-primary mt-3" onclick="reset_password()">Reset Password</button>
                         </div>
                     </div>
                 </div> 

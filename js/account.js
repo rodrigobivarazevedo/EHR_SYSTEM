@@ -76,6 +76,56 @@ function update_personal_details() {
     }
 }
 
+function reset_password() {
+    // Get form values
+    var oldPassword = document.getElementById('old_password').value;
+    var newPassword = document.getElementById('new_password').value;
+    var confirmPassword = document.getElementById('confirm_password').value;
+
+    // Validate password fields
+    if (oldPassword === '' || newPassword === '' || confirmPassword === '') {
+        alert('Please fill in all password fields.');
+        return;
+    }
+
+    // Check if new password and confirm password match
+    if (newPassword !== confirmPassword) {
+        alert('New password and confirm password do not match.');
+        return;
+    }
+
+    // Show a confirmation alert
+    const confirmReset = window.confirm('Are you sure you want reset password?');
+
+    // Check if the user clicked "OK" in the confirmation alert
+    if (confirmReset) {
+        $.ajax({
+            url: "/EHR_system/ajax/accountAJAX.php",
+            type: "POST",
+            dataType: "json", // Changed "JSON" to "json"
+            data: { oldPassword: oldPassword, newPassword: newPassword, action: "reset_password" },
+            success: function(response) {
+                if (response.success){
+                    alert(response.success);
+                    var resetPasswordForm = document.getElementById('resetPasswordForm');
+                    resetPasswordForm.reset();
+                    location.reload();
+                } else if(response.message){
+                    alert(response.message);
+                }
+                
+            },
+            error: function(xhr) {
+                // Log detailed error information to the console
+                console.log(xhr.responseText);
+                
+                // Display a user-friendly error message
+                alert("Server request failed.");
+            }
+        });
+    }
+}
+
 
 
 function confirmSignOut() {

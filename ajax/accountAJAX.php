@@ -61,33 +61,13 @@ if ($action === "update_personal_details") {
 }
 
 
-if ($action === "update_password") {
+if ($action === "reset_password") {
 
-    $PatientID = $_POST["PatientID"];
-    $RecordID = $_POST["RecordID"];
-    $newData = [
-        'DateRecorded' => $_POST["DateRecorded"],
-        'diagnosis' => $_POST["Diagnosis"],
-        'medications' => $_POST["Medications"],
-        'procedures' => $_POST["Procedures"],
-        'comments' => $_POST["Comments"],
-    
-    ];
 
-    $statement = $dbo->conn->prepare(
-        "SELECT DoctorID FROM patients WHERE PatientID = :PatientID"
-    );
-    $statement->bindParam(':PatientID', $PatientID, PDO::PARAM_INT);
-    $statement->execute();
+    $oldPassword = $_POST["oldPassword"];
+    $newPassword = $_POST["newPassword"];
     
-    $isDoctorPatient = $statement->fetch(PDO::FETCH_ASSOC);
-    
-    if (!$isDoctorPatient) {
-        echo json_encode(["message" => "Access denied, patient not yours"]);
-        exit(); // Terminate script execution after sending the response
-    }
-   
-    $result = $pdo->update_health_record($dbo, $RecordID, $newData);
+    $result = $pdo->reset_password($dbo, $UserID, $oldPassword, $newPassword);
 
     // Check if the result is an error
     if (isset($result["error"])) {

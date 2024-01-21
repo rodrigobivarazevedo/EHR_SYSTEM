@@ -1,5 +1,6 @@
 <?php
 require_once "database.php";
+require_once "mailer.php"; 
 
 class Appointmentsinfo
 {
@@ -239,33 +240,7 @@ class Users{
         }
     }
 
-        private function send_welcome_email($to, $FirstName, $LastName) {
-            $subject = 'Welcome to MyFastCARE!';
-            
-            $message = '<html>
-                            <head>
-                                <title>Welcome to MyFastCARE</title>
-                            </head>
-                            <body>
-                                <p>Dear ' . $FirstName . ' ' . $LastName . ',</p>
-                                <p>Welcome to <strong>MyFastCARE</strong>!</p>
-                                <p>Thank you for registering with MyFastCARE, a medical EHR platform for doctors, proudly brought to you by FastCARE Corporation.</p>
-                                <p>We are excited to have you on board and look forward to providing you with excellent services.</p>
-                                <p>Best regards,<br>
-                                The FastCARE Team</p>
-                            </body>
-                        </html>';
-            
-            $headers = 'MIME-Version: 1.0' . "\r\n";
-            $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-            $headers .= 'From: FastCARE <myfastcaresolutions@gmail.com>' . "\r\n" .
-                    'Reply-To: myfastcaresolutions@gmail.com' . "\r\n" .
-                    'X-Mailer: PHP/' . phpversion();
         
-            // Use the mail function to send the email
-            mail($to, $subject, $message, $headers);
-        }
-    
     
         public function login($dbo, $UsernameOrEmail, $password) {
             try {
@@ -296,6 +271,44 @@ class Users{
                 return json_encode(["error" => $e->getMessage()]);
             }
         }
+
+        public function reset_password($dbo, $UserID, $oldPassword, $newPassword){
+            try {
+                // Check if the old password is correct
+                $checkUserStatement = $dbo->conn->prepare("SELECT * FROM users WHERE UserID = :UserID");
+                $checkUserStatement->bindParam(':UserID', $UserID, PDO::PARAM_INT);
+                $checkUserStatement->execute();
+        
+                $user = $checkUserStatement->fetch(PDO::FETCH_ASSOC);
+        
+                if ($user) {
+                    // User found, verify the old password
+                    $hashed_password = $user['Password'];
+        
+                    if (password_verify($oldPassword, $hashed_password)) {
+                        // Old password is correct, proceed with updating the password
+                        $newHashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+        
+                        $updatePasswordStatement = $dbo->conn->prepare("UPDATE users SET Password = :newHashedPassword WHERE UserID = :UserID");
+                        $updatePasswordStatement->bindParam(':newHashedPassword', $newHashedPassword, PDO::PARAM_STR);
+                        $updatePasswordStatement->bindParam(':UserID', $UserID, PDO::PARAM_INT);
+                        $updatePasswordStatement->execute();
+        
+                        return json_encode(["success" => "Password reset successful"]);
+                    } else {
+                        // Incorrect old password
+                        return json_encode(["message" => "Invalid old password"]);
+                    }
+                } else {
+                    // User not found
+                    return json_encode(["message" => "User not found"]);
+                }
+            } catch (PDOException $e) {
+                // Handle the exception (e.g., log, display an error message)
+                return json_encode(["error" => $e->getMessage()]);
+            }
+        }
+        
 
 
         public function update_user($dbo, $UserID, $email, $username, $contact) {
