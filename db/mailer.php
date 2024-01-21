@@ -51,9 +51,7 @@ function send_welcome_email($to, $FirstName, $LastName) {
 
                 // Send the email
                 $mail->send();
-                echo 'Email sent successfully!';
             } catch (Exception $e) {
-                echo 'Error: ' . $e->getMessage();
             }
         
         }
