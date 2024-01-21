@@ -106,48 +106,23 @@ if (!isset($_SESSION['UserID'])) {
                         <div class="col-md-5">
                         
                             <div class="container p-4">
-                            <h3 class="mb-4" id="editTitle">Personal Data</h3>
-                                    <!-- Patient Creation Form -->
-                                    <form id="updatePatientForm" class="mt-3">
+                            <h3 class="mb-4" id="personalTitle">Personal Data</h3>
+                                    <!-- Update personal details Form -->
+                                    <form id="updatePersonalForm" class="mt-3">
                                         <div class="mb-3">
-                                            <label for="PatientID_update" class="form-label">Patient ID:</label>
-                                            <input type="text" class="form-control" id="PatientID_update" placeholder="Enter patient ID" required>
+                                            <label for="username_update" class="form-label">Username:</label>
+                                            <input type="text" class="form-control" id="username_update" placeholder="Enter Username" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="firstname_update" class="form-label">First Name:</label>
-                                            <input type="text" class="form-control" id="firstname_update" placeholder="Enter patient first name" required>
+                                            <label for="email_update" class="form-label">Email:</label>
+                                            <input type="text" class="form-control" id="email_update" placeholder="Enter Email" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="lastname_update" class="form-label">Last Name:</label>
-                                            <input type="text" class="form-control" id="lastname_update" placeholder="Enter patient last name" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="patientEmail_update" class="form-label">Patient Email:</label>
-                                            <input type="email" class="form-control" id="patientEmail_update" placeholder="Enter patient email" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="patientBirthdate_update" class="form-label">Date of Birth:</label>
-                                            <input type="date" class="form-control" id="patientBirthdate_update" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="patientGender_update" class="form-label">Gender:</label>
-                                            <select id="patientGender_update" class="form-select" required>
-                                                <option disabled selected value="">Select gender...</option>
-                                                <option value="Male">Male</option>
-                                                <option value="Female">Female</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="patientAddress_update" class="form-label">Address:</label>
-                                            <input type="text" class="form-control" id="patientAddress_update" placeholder="Enter patient address">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="patientContactNumber_update" class="form-label">Contact Number:</label>
-                                            <input type="tel" class="form-control" id="patientContactNumber_update" placeholder="Enter contact number">
+                                            <label for="contact_update" class="form-label">Contact Number:</label>
+                                            <input type="tel" class="form-control" id="contact_update" placeholder="Enter Contact Number" required>
                                         </div>
                                     </form>
-                                    <button type="button" class="btn btn-primary mt-3" onclick="update_patient()">Update Details</button>
+                                    <button type="button" class="btn btn-primary mt-3" onclick="update_personal_details()">Update Details</button>
                             </div>
                         </div>
                 </div> 
@@ -162,48 +137,17 @@ if (!isset($_SESSION['UserID'])) {
                     <div class="col-md-5">
 
                         <div class="container p-4">
-                        <h3 class="mb-4" id="editTitle">Login Data</h3>
-                                <!-- Patient Creation Form -->
-                                <form id="updatePatientForm" class="mt-3">
-                                    <div class="mb-3">
-                                        <label for="PatientID_update" class="form-label">Patient ID:</label>
-                                        <input type="text" class="form-control" id="PatientID_update" placeholder="Enter patient ID" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="firstname_update" class="form-label">First Name:</label>
-                                        <input type="text" class="form-control" id="firstname_update" placeholder="Enter patient first name" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="lastname_update" class="form-label">Last Name:</label>
-                                        <input type="text" class="form-control" id="lastname_update" placeholder="Enter patient last name" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="patientEmail_update" class="form-label">Patient Email:</label>
-                                        <input type="email" class="form-control" id="patientEmail_update" placeholder="Enter patient email" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="patientBirthdate_update" class="form-label">Date of Birth:</label>
-                                        <input type="date" class="form-control" id="patientBirthdate_update" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="patientGender_update" class="form-label">Gender:</label>
-                                        <select id="patientGender_update" class="form-select" required>
-                                            <option disabled selected value="">Select gender...</option>
-                                            <option value="Male">Male</option>
-                                            <option value="Female">Female</option>
-                                            <option value="Other">Other</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="patientAddress_update" class="form-label">Address:</label>
-                                        <input type="text" class="form-control" id="patientAddress_update" placeholder="Enter patient address">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="patientContactNumber_update" class="form-label">Contact Number:</label>
-                                        <input type="tel" class="form-control" id="patientContactNumber_update" placeholder="Enter contact number">
-                                    </div>
+                        <h3 class="mb-4" id="loginTitle">Reset Password</h3>
+                                <!-- Update login data Form -->
+                                <form id="updateLoginForm" class="mt-3">
+                                    <form method="post" action="/forgot-password">
+                                        <div class="form-group">
+                                            <label for="forgotEmail" class="form-label">Enter your email address to reset your password:</label>
+                                            <input type="text" class="form-control" id="forgotEmail" name="forgotEmail" placeholder="Enter your email">
+                                        </div>
+                                    </form>
                                 </form>
-                                <button type="button" class="btn btn-primary mt-3" onclick="update_patient()">Update Details</button>
+                                <button type="button" class="btn btn-primary mt-3" onclick="update_password()">Reset Password</button>
                         </div>
                     </div>
                 </div> 

@@ -223,6 +223,7 @@ class Users{
     
             // Execute statement
             $statement->execute();
+            send_welcome_email($Email, $FirstName, $LastName);
     
             // Return success message or any other information
             return json_encode(["success" => "Registration successful"]);
@@ -237,6 +238,34 @@ class Users{
             }
         }
     }
+
+        private function send_welcome_email($to, $FirstName, $LastName) {
+            $subject = 'Welcome to MyFastCARE!';
+            
+            $message = '<html>
+                            <head>
+                                <title>Welcome to MyFastCARE</title>
+                            </head>
+                            <body>
+                                <p>Dear ' . $FirstName . ' ' . $LastName . ',</p>
+                                <p>Welcome to <strong>MyFastCARE</strong>!</p>
+                                <p>Thank you for registering with MyFastCARE, a medical EHR platform for doctors, proudly brought to you by FastCARE Corporation.</p>
+                                <p>We are excited to have you on board and look forward to providing you with excellent services.</p>
+                                <p>Best regards,<br>
+                                The FastCARE Team</p>
+                            </body>
+                        </html>';
+            
+            $headers = 'MIME-Version: 1.0' . "\r\n";
+            $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+            $headers .= 'From: FastCARE <myfastcaresolutions@gmail.com>' . "\r\n" .
+                    'Reply-To: myfastcaresolutions@gmail.com' . "\r\n" .
+                    'X-Mailer: PHP/' . phpversion();
+        
+            // Use the mail function to send the email
+            mail($to, $subject, $message, $headers);
+        }
+    
     
         public function login($dbo, $UsernameOrEmail, $password) {
             try {
@@ -267,6 +296,63 @@ class Users{
                 return json_encode(["error" => $e->getMessage()]);
             }
         }
+
+
+        public function update_user($dbo, $UserID, $email, $username, $contact) {
+            try {
+                // Check if the new username already exists for other users
+                $checkUserQuery = "SELECT UserID FROM Users WHERE Username = :Username AND UserID != :UserID";
+                $UserExists = $dbo->conn->prepare($checkUserQuery);
+                $UserExists->bindParam(':Username', $username, PDO::PARAM_STR);
+                $UserExists->bindParam(':UserID', $UserID, PDO::PARAM_INT);
+                $UserExists->execute();
+        
+                // Check if the username is already taken
+                if ($UserExists->rowCount() > 0) {
+                    return json_encode(["message" => "Username already exists"]);
+                }
+        
+                // Update the user information
+                $updateUserQuery = "UPDATE Users SET Username = :Username, Email = :Email, ContactNumber = :ContactNumber WHERE UserID = :UserID";
+                $statement = $dbo->conn->prepare($updateUserQuery);
+                $statement->bindParam(':UserID', $UserID, PDO::PARAM_INT);
+                $statement->bindParam(':Username', $username, PDO::PARAM_STR);
+                $statement->bindParam(':Email', $email, PDO::PARAM_STR);
+                $statement->bindParam(':ContactNumber', $contact, PDO::PARAM_STR);
+                $statement->execute();
+        
+                // Return success message or any other information
+                return json_encode(["success" => "User information updated successfully"]);
+            } catch (PDOException $e) {
+                // Handle exceptions or return a generic error message
+                return json_encode(["message" => "An error occurred during user information update. Please try again."]);
+            }
+        }
+
+        public function get_user_info($dbo, $UserID) {
+            try {
+                // Select the user information from the Users table
+                $getUserInfoQuery = "SELECT Username, Email, ContactNumber FROM Users WHERE UserID = :UserID";
+                $statement = $dbo->conn->prepare($getUserInfoQuery);
+                $statement->bindParam(':UserID', $UserID, PDO::PARAM_INT);
+                $statement->execute();
+        
+                // Fetch the user information
+                $userInfo = $statement->fetch(PDO::FETCH_ASSOC);
+        
+                // Check if user information exists
+                if ($userInfo) {
+                    return json_encode($userInfo);
+                } else {
+                    return json_encode(["message" => "User not found"]);
+                }
+            } catch (PDOException $e) {
+                // Handle exceptions or return a generic error message
+                return json_encode(["message" => "An error occurred while retrieving user information"]);
+            }
+        }
+        
+        
         
 
 }
