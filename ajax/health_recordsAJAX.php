@@ -93,7 +93,7 @@ if ($action === "delete_health_record") {
     
     $recordID = $_POST["RecordID"]; // Assuming the parameter is named recordID
     $PatientID = $_POST["PatientID"];
-
+    
     $statement = $dbo->conn->prepare(
         "SELECT DoctorID FROM patients WHERE PatientID = :PatientID"
     );

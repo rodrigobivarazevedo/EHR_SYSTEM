@@ -270,7 +270,7 @@ function confirmation(firstName, lastName, PatientID, RecordID) {
 
 function delete_health_record(PatientID, RecordID) {
     $.ajax({
-        url: "/EHR_system/ajax/doctor_patientAJAX.php",
+        url: "/EHR_system/ajax/health_recordsAJAX.php",
         type: "POST",
         dataType: "json",
         data: { PatientID: PatientID, RecordID: RecordID, action: "delete_health_record" },
