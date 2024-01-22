@@ -55,5 +55,43 @@ function send_welcome_email($to, $FirstName, $LastName) {
             }
         
         }
+        
+function sendPasswordResetEmail($to, $token) {
+            $mail = new PHPMailer(true);
 
-?>
+            try {
+
+            // Set the mail server details
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com'; // Replace with your SMTP server address
+            $mail->SMTPAuth = true;
+            $mail->Username = 'myfastcaresolutions@gmail.com'; // Replace with your SMTP username
+            $mail->Password = 'ells ijzk izde byyu'; // Replace with your SMTP password
+            $mail->SMTPSecure = 'tls'; // Use 'tls' or 'ssl' depending on your server configuration
+            $mail->Port = 587; // Use the appropriate port for your server
+
+            // Set the sender and recipient email addresses
+            $mail->setFrom('myfastcaresolutions@gmail.com', 'FastCARE');
+            $mail->addAddress($to);
+
+            //Attachments
+            //$mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
+            //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+            $subject = 'Password Reset MyFastCARE';
+
+            $message = 'Click the following link to reset your password: http://localhost/EHR_system/ui/reset_password.php?token=' . $token;
+
+            //Content
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->Subject = $subject;
+            $mail->Body    = $message;
+            //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+                // Send the email
+                $mail->send();
+            } catch (Exception $e) {
+                // Log the exception or handle it in a way that fits your application
+                error_log('Error sending password reset email: ' . $e->getMessage());
+            }
+        
+        }

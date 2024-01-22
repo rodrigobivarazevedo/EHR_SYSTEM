@@ -136,14 +136,14 @@
 
             <!-- Forgot Password Section -->
             <hr class="mt-4">
-            <form method="post" action="/forgot-password">
+            <form>
                 <h5 class="mb-3">Forgot Password?</h5>
                 <p>Enter your email address to reset your password.</p>
                 <div class="form-group">
                     <label for="forgotEmail">Email Address</label>
                     <input type="text" class="form-control" id="forgotEmail" name="forgotEmail" placeholder="Enter your email">
                 </div>
-                <button type="submit" class="btn btn-primary mt-3">Reset Password</button>
+                <button type="submit" class="btn btn-primary mt-3" onclick="reset_password()" id="resetButton">Reset Password</button>
             </form>
         </div>
     </div>

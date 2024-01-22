@@ -207,6 +207,45 @@ function register() {
 }
 
 
+function reset_password() {
+    // Prevent multiple submissions
+    let email = document.getElementById("forgotEmail").value;
+
+    // Disable the submit button during the AJAX request
+    let submitButton = document.getElementById("resetButton");
+    submitButton.disabled = true;
+
+    // Perform AJAX call for password reset
+    $.ajax({
+        url: "/EHR_system/ajax/reset_passwordAJAX.php",  // Adjust the URL for password reset
+        type: "POST",
+        dataType: "json",
+        data: {
+            email: email
+        },
+        success: function (response) {
+            // Check if the password reset initiation was successful
+            if (response.message) {
+                // Redirect to a success page or handle as needed
+                alert(response.message);
+            } 
+        },
+        error: function (xhr) {
+            // Log detailed error information to the console
+            console.log(xhr.responseText);
+
+            // Display a user-friendly error message
+            alert("Server request failed.");
+        },
+        complete: function () {
+            // Re-enable the submit button after the AJAX request completes
+            submitButton.disabled = false;
+        }
+    });
+}
+
+
+
 
     
     
