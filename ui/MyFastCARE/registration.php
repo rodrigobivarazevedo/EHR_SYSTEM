@@ -116,7 +116,7 @@
 
     <div class="card">
         <div class="card-header">
-            User Registration
+            Doctor Registration
         </div>
         <div class="card-body">
             <form id="registrationForm">
