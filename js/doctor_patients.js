@@ -94,7 +94,7 @@ function updateCardUI(data) {
                     <div class="card-body">
                         <h5 class="card-title">${patient.FirstName} ${patient.LastName}</h5>
                         <p class="card-text">ID: ${patient.PatientID}, Email: ${patient.Email}</p>
-                        <p class="card-text">Contact Number:${patient.ContactNumber}</p>
+                        <p class="card-text">Contact Number: ${patient.ContactNumber}</p>
                       
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
@@ -216,7 +216,7 @@ function createPatient() {
     contactNumber = document.getElementById('patientContactNumber_create').value;
     // Get the value of the checked checkbox (smoking)
     let smokingCheckbox = document.getElementById('smokingCheckbox');
-    let isSmoker = smokingCheckbox.checked ? smokingCheckbox.value : 'no';
+    let isSmoker = smokingCheckbox.checked ? smokingCheckbox.value : 'No';
 
     if (!firstName || !lastName || !email || !birthdate || !gender || !address || !contactNumber || !isSmoker) {
         // Display an alert if any required field is empty
@@ -229,11 +229,11 @@ function createPatient() {
 
     // Check if the user clicked "OK" in the confirmation alert
     if (confirmCreate) {    
-        create_patient(firstName, lastName, email, birthdate, gender, address, contactNumber);     
+        create_patient(firstName, lastName, email, birthdate, gender, address, contactNumber, isSmoker);     
     }
 }
 
-function create_patient(firstName, lastName, email, birthdate, gender, address, contactNumber) {
+function create_patient(firstName, lastName, email, birthdate, gender, address, contactNumber, isSmoker) {
     $.ajax({
         url: "/EHR_system/ajax/doctor_patientAJAX.php",
         type: "POST",
