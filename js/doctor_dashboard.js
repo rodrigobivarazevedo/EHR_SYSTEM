@@ -44,7 +44,7 @@ function get_all_patients() {
                         
                           <div class="d-flex justify-content-between align-items-center">
                               <div class="btn-group">
-                                  <button type="button" class="btn btn-sm btn-outline-secondary" id="view-edit-btn">View/Edit</button>
+                              <button type="button" class="btn btn-sm btn-outline-secondary" id="view-edit-btn" onclick="editPatient('${patient.PatientID}','${patient.FirstName}', '${patient.LastName}', '${patient.Email}', '${patient.Birthdate}', '${patient.Gender}', '${patient.Address}', '${patient.ContactNumber}')">View/Edit</button>
                               </div>
                           </div>
                       </div>
@@ -57,6 +57,22 @@ function get_all_patients() {
           content.appendChild(cardElement);
       });
   }
+
+  function editPatient(PatientID, firstName, lastName, email, birthdate, gender, address, contactNumber) {
+    // Populate the modal content with the patient information
+    document.getElementById('Title').textContent = `${firstName} ${lastName} details`;
+    document.getElementById('PatientID_modal').textContent = PatientID;
+    document.getElementById('firstname_modal').textContent = firstName;
+    document.getElementById('lastname_modal').textContent = lastName;
+    document.getElementById('patientEmail_modal').textContent = email;
+    document.getElementById('patientBirthdate_modal').textContent = birthdate;
+    document.getElementById('patientGender_modal').textContent = gender;
+    document.getElementById('patientAddress_modal').textContent = address;
+    document.getElementById('patientContactNumber_modal').textContent = contactNumber;
+
+    // Show the Bootstrap modal
+    $('#PatientModal').modal('show');
+}
 
 
     

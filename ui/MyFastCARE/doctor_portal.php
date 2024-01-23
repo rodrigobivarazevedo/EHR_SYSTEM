@@ -121,14 +121,6 @@ if (!isset($_SESSION['UserID'])) {
                 <div class="album py-5 bg-light">
             
                     <div class="container">
-                        <div>
-                            <select id="consultationType" class="form-control-file dropdown_item mb-3">
-                                <option disabled selected value="">Filter by Gender...</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
                         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="patients">
                         <!-- Cards will be updated dynamically  -->
                         
@@ -177,6 +169,38 @@ if (!isset($_SESSION['UserID'])) {
   </div>
 </div>
       
+
+
+
+<!-- patient details Modal -->
+<div class="modal fade" id="PatientModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="Title">Patient Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <p><strong>ID:</strong> <span id="PatientID_modal"></span></p>
+                <p><strong>First Name:</strong> <span id="firstname_modal"></span></p>
+                <p><strong>Last Name:</strong> <span id="lastname_modal"></span></p>
+                <p><strong>Email:</strong> <span id="patientEmail_modal"></span></p>
+                <p><strong>Birthdate:</strong> <span id="patientBirthdate_modal"></span></p>
+                <p><strong>Gender:</strong> <span id="patientGender_modal"></span></p>
+                <p><strong>Address:</strong> <span id="patientAddress_modal"></span></p>
+                <p><strong>Contact Number:</strong> <span id="patientContactNumber_modal"></span></p>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
