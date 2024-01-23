@@ -19,6 +19,7 @@ if ($action === "create_patient") {
     $gender = $_POST["gender"];
     $address = $_POST["address"];
     $contactNumber = $_POST["contactNumber"];
+    $smoker = $_POST["smoker"];
 
     $statement = $dbo->conn->prepare(
         "SELECT DoctorID FROM doctors WHERE UserID = :UserID"
@@ -35,7 +36,7 @@ if ($action === "create_patient") {
         exit(); // Terminate script execution after sending the response
     }
 
-    $result = $patients->create_patient($dbo, $doctorID, $firstName, $lastName, $email, $birthdate, $gender, $address, $contactNumber);
+    $result = $patients->create_patient($dbo, $doctorID, $firstName, $lastName, $email, $birthdate, $gender, $address, $contactNumber, $smoker);
 
     // Check if the result is an error
     if (isset($result["error"])) {
@@ -62,6 +63,7 @@ if ($action === "update_patient") {
         'Gender' => $_POST["gender"],
         'Address' => $_POST["address"],
         'ContactNumber' => $_POST["contactNumber"],
+        'Smoker' => $_POST["smoker"],
     ];
     
 

@@ -141,7 +141,7 @@ if (!isset($_SESSION['UserID'])) {
                 
                     <div class="container p-4">
                     <h3 class="mb-4" id="editTitle">Edit Patient</h3>
-                            <!-- Patient Creation Form -->
+                            <!-- Patient update Form -->
                             <form id="updatePatientForm" class="mt-3">
                                 <div class="mb-3">
                                     <label for="PatientID_update" class="form-label">Patient ID:</label>
@@ -172,6 +172,20 @@ if (!isset($_SESSION['UserID'])) {
                                         <option value="Other">Other</option>
                                     </select>
                                 </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label d-block">Patient smokes?</label>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="smokingCheckbox_update" name="smokingCheckbox_update" value="Yes" onclick="handleCheckboxClickUpdate(this)">
+                                        <label class="form-check-label" for="smokingCheckbox_update">Yes</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="noSmokingCheckbox_update" name="smokingCheckbox_update" value="No" onclick="handleCheckboxClickUpdate(this)">
+                                        <label class="form-check-label" for="noSmokingCheckbox_update">No</label>
+                                    </div>
+                                    <input type="hidden" id="smoker_update" name="smoker_update">
+                                </div>
+
                                 <div class="mb-3">
                                     <label for="patientAddress_update" class="form-label">Address:</label>
                                     <input type="text" class="form-control" id="patientAddress_update" placeholder="Enter patient address">
@@ -229,6 +243,18 @@ if (!isset($_SESSION['UserID'])) {
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="patientGender_update" id="otherRadio_update" value="Other" required>
                         <label class="form-check-label" for="otherRadio_update">Other</label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label d-block">Patient smokes?</label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="smokingCheckbox" name="smokingCheckbox" value="yes" onclick="handleCheckboxClick(this)">
+                        <label class="form-check-label" for="smokingCheckbox">Yes</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="noSmokingCheckbox" name="smokingCheckbox" value="no" onclick="handleCheckboxClick(this)">
+                        <label class="form-check-label" for="noSmokingCheckbox">No</label>
                     </div>
                 </div>
 

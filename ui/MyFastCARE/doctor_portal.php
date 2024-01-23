@@ -192,6 +192,7 @@ if (!isset($_SESSION['UserID'])) {
                 <p><strong>Gender:</strong> <span id="patientGender_modal"></span></p>
                 <p><strong>Address:</strong> <span id="patientAddress_modal"></span></p>
                 <p><strong>Contact Number:</strong> <span id="patientContactNumber_modal"></span></p>
+                <p><strong>Smoker:</strong> <span id="smoker_modal"></span></p>
             </div>
 
             <!-- Modal Footer -->

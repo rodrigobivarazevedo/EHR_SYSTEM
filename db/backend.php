@@ -470,7 +470,7 @@ class Messages
 class Patients
 
 {
-    public function create_patient($dbo, $doctorID, $firstName, $lastName, $email, $birthdate, $gender, $address, $contactNumber)
+    public function create_patient($dbo, $doctorID, $firstName, $lastName, $email, $birthdate, $gender, $address, $contactNumber, $smoker)
     {
         try {
             // Check if doctorID exists in the Doctors table
@@ -480,8 +480,8 @@ class Patients
             }
 
             $statement = $dbo->conn->prepare(
-                "INSERT INTO Patients (DoctorID, FirstName, LastName, Email, Birthdate, Gender, Address, ContactNumber) 
-                VALUES (:doctorID, :firstName, :lastName, :email, :birthdate, :gender, :address, :contactNumber)"
+                "INSERT INTO Patients (DoctorID, FirstName, LastName, Email, Birthdate, Gender, Address, ContactNumber, Smoker) 
+                VALUES (:doctorID, :firstName, :lastName, :email, :birthdate, :gender, :address, :contactNumber, :smoker)"
             );
             $statement->bindParam(':doctorID', $doctorID, PDO::PARAM_INT);
             $statement->bindParam(':firstName', $firstName, PDO::PARAM_STR);
@@ -491,6 +491,7 @@ class Patients
             $statement->bindParam(':gender', $gender, PDO::PARAM_STR);
             $statement->bindParam(':address', $address, PDO::PARAM_STR);
             $statement->bindParam(':contactNumber', $contactNumber, PDO::PARAM_STR);
+            $statement->bindParam(':smoker', $smoker, PDO::PARAM_STR);
 
             $result = $statement->execute();
 

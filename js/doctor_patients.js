@@ -98,7 +98,7 @@ function updateCardUI(data) {
                       
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary" id="view-edit-btn" onclick="editPatient('${patient.PatientID}','${patient.FirstName}', '${patient.LastName}', '${patient.Email}', '${patient.Birthdate}', '${patient.Gender}', '${patient.Address}', '${patient.ContactNumber}')">View/Edit</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="view-edit-btn" onclick="editPatient('${patient.PatientID}','${patient.FirstName}', '${patient.LastName}', '${patient.Email}', '${patient.Birthdate}', '${patient.Gender}', '${patient.Address}', '${patient.ContactNumber}', '${patient.Smoker}')">View/Edit</button>
 
                             </div>
                         </div>
@@ -113,7 +113,7 @@ function updateCardUI(data) {
     });
 }
 
-function editPatient(PatientID,firstName, lastName, email, birthdate, gender, address, contactNumber) {
+function editPatient(PatientID,firstName, lastName, email, birthdate, gender, address, contactNumber, smoker) {
     // Populate the form fields with the patient information
     document.getElementById('editTitle').textContent = `Edit ${firstName} ${lastName} details`;
     document.getElementById('PatientID_update').value = PatientID;
@@ -125,20 +125,43 @@ function editPatient(PatientID,firstName, lastName, email, birthdate, gender, ad
     document.getElementById('patientAddress_update').value = address;
     document.getElementById('patientContactNumber_update').value = contactNumber;
 
+    // Handle the smoker checkbox
+    var smokingCheckbox = document.getElementById('smokingCheckbox_update');
+    var noSmokingCheckbox = document.getElementById('noSmokingCheckbox_update');
+    
+    // Check the smoker value and update checkboxes accordingly
+    if (smoker === 'Yes') {
+        smokingCheckbox.checked = true;
+        noSmokingCheckbox.checked = false;
+    } else {
+        smokingCheckbox.checked = false;
+        noSmokingCheckbox.checked = true;
+    }
+
     // Optionally, you can perform additional actions related to editing a patient
 }
 
+function handleCheckboxClickUpdate(clickedCheckbox) {
+    // Get the other checkbox
+    
+    const otherCheckbox = clickedCheckbox.id === 'smokingCheckbox_update' ? document.getElementById('noSmokingCheckbox_update') : document.getElementById('smokingCheckbox_update');
+    // Uncheck the other checkbox
+    otherCheckbox.checked = false;
+}
 
 function update_patient() {
-    PatientID = document.getElementById('PatientID_update').value;
-    firstName = document.getElementById('firstname_update').value;
-    lastName = document.getElementById('lastname_update').value;
-    email = document.getElementById('patientEmail_update').value;
-    birthdate = document.getElementById('patientBirthdate_update').value;
-    gender = document.getElementById('patientGender_update').value;
-    address = document.getElementById('patientAddress_update').value;
-    contactNumber = document.getElementById('patientContactNumber_update').value;
-    if (!PatientID || !firstName || !lastName || !email || !birthdate || !gender || !address || !contactNumber) {
+    let PatientID = document.getElementById('PatientID_update').value;
+    let firstName = document.getElementById('firstname_update').value;
+    let lastName = document.getElementById('lastname_update').value;
+    let email = document.getElementById('patientEmail_update').value;
+    let birthdate = document.getElementById('patientBirthdate_update').value;
+    let gender = document.getElementById('patientGender_update').value;
+    let address = document.getElementById('patientAddress_update').value;
+    let contactNumber = document.getElementById('patientContactNumber_update').value;
+    let smokingCheckbox = document.getElementById('smokingCheckbox_update');
+    let isSmoker = smokingCheckbox.checked ? smokingCheckbox.value : 'no';
+
+    if (!PatientID || !firstName || !lastName || !email || !birthdate || !gender || !address || !contactNumber || !isSmoker) {
         // Display an alert if any required field is empty
         alert('Please select a Patient or make sure no fields are empty');
         return;
@@ -153,7 +176,7 @@ function update_patient() {
             url: "/EHR_system/ajax/doctor_patientAJAX.php",
             type: "POST",
             dataType: "json", // Changed "JSON" to "json"
-            data: { PatientID: PatientID, firstName: firstName, lastName: lastName, email: email, birthdate: birthdate, gender: gender, address: address, contactNumber: contactNumber, action: "update_patient" },
+            data: { PatientID: PatientID, firstName: firstName, lastName: lastName, email: email, birthdate: birthdate, gender: gender, address: address, contactNumber: contactNumber,smoker: isSmoker, action: "update_patient" },
             success: function(response) {
                 if (response.success){
                     alert(response.success);
@@ -174,6 +197,13 @@ function update_patient() {
 }
 
 
+function handleCheckboxClick(clickedCheckbox) {
+    // Get the other checkbox
+    
+    const otherCheckbox = clickedCheckbox.id === 'smokingCheckbox' ? document.getElementById('noSmokingCheckbox') : document.getElementById('smokingCheckbox');
+    // Uncheck the other checkbox
+    otherCheckbox.checked = false;
+}
 
 function createPatient() {
     // Check if all required values are filled
@@ -184,8 +214,11 @@ function createPatient() {
     gender = document.querySelector('input[name="patientGender_update"]:checked').value;
     address = document.getElementById('patientAddress_create').value;
     contactNumber = document.getElementById('patientContactNumber_create').value;
+    // Get the value of the checked checkbox (smoking)
+    let smokingCheckbox = document.getElementById('smokingCheckbox');
+    let isSmoker = smokingCheckbox.checked ? smokingCheckbox.value : 'no';
 
-    if (!firstName || !lastName || !email || !birthdate || !gender || !address || !contactNumber) {
+    if (!firstName || !lastName || !email || !birthdate || !gender || !address || !contactNumber || !isSmoker) {
         // Display an alert if any required field is empty
         alert('Please fill in all required fields.');
         return;
@@ -205,7 +238,7 @@ function create_patient(firstName, lastName, email, birthdate, gender, address, 
         url: "/EHR_system/ajax/doctor_patientAJAX.php",
         type: "POST",
         dataType: "json", // Changed "JSON" to "json"
-        data: { firstName: firstName, lastName: lastName, email: email, birthdate: birthdate, gender: gender, address: address, contactNumber: contactNumber, action: "create_patient" },
+        data: { firstName: firstName, lastName: lastName, email: email, birthdate: birthdate, gender: gender, address: address, contactNumber: contactNumber, smoker: isSmoker, action: "create_patient" },
         beforeSend: function() {
             // Add any code to run before the request is sent (optional)
         },
