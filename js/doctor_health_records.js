@@ -88,7 +88,7 @@ function updateCardUI(data) {
             <div class="col">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <h5 class="card-title">ID: ${record.RecordID} Date: ${record.DateRecorded}</h5>
+                        <h5 class="card-title">Date: ${record.DateRecorded} ID: ${record.RecordID}</h5>
                         <p class="card-text">PatientID: ${record.PatientID}</p>
                         <p class="card-text">Diagnosis: ${record.diagnosis}</p>
                       

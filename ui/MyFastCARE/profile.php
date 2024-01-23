@@ -145,11 +145,11 @@ if (!isset($_SESSION['UserID'])) {
                                             <input type="password" class="form-control" id="old_password" placeholder="Enter old password" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="new_password" class="form-label">Email:</label>
+                                            <label for="new_password" class="form-label">New Password:</label>
                                             <input type="password" class="form-control" id="new_password" placeholder="Enter new password" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="confirm_password" class="form-label">Contact Number:</label>
+                                            <label for="confirm_password" class="form-label">Confirm Password:</label>
                                             <input type="password" class="form-control" id="confirm_password" placeholder="Confirm new password" required>
                                         </div>
                                 </form>
