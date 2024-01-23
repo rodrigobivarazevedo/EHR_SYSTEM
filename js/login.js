@@ -119,6 +119,7 @@ function register() {
     let password = document.getElementById("password").value;
     let confirmPassword = document.getElementById("confirmPassword").value;
     let speciality = document.getElementById("speciality").value;
+    let clinic = document.getElementById("clinic").value;
     let FirstName = document.getElementById("FirstName").value;
     let LastName = document.getElementById("LastName").value;
     let gender = document.getElementById("gender").value;
@@ -126,7 +127,7 @@ function register() {
     
      
     // Check if any of the required fields are empty
-    if (!username || !email || !contactNumber || !password || !confirmPassword || !FirstName || !LastName || !gender || !birthdate || !speciality) {
+    if (!username || !email || !contactNumber || !password || !confirmPassword || !FirstName || !LastName || !gender || !birthdate || !speciality || !clinic) {
         alert("All required fields must be provided.");
         submitButton.disabled = false;  // Re-enable the submit button
         return;
@@ -170,6 +171,7 @@ function register() {
         type: "POST",
         dataType: "json",
         data: {
+            clinic: clinic,
             speciality: speciality,
             username: username,
             email: email,

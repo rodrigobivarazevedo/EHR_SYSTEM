@@ -177,7 +177,7 @@ class All_Info
 
 class Users{
 
-    public function create_user($dbo, $Username, $Password, $Email, $ContactNumber, $FirstName, $LastName, $gender, $birthdate, $speciality) {
+    public function create_user($dbo, $Username, $Password, $Email, $ContactNumber, $FirstName, $LastName, $gender, $birthdate, $speciality, $clinic) {
         try {
             $checkUserQuery = "SELECT username FROM users WHERE Username = :Username";
     
@@ -185,14 +185,13 @@ class Users{
             $UserExists->bindParam(':Username', $Username, PDO::PARAM_STR);
             // Execute statement
             $UserExists->execute();
-
+    
             // Check the number of rows returned by the SELECT query
             if ($UserExists->rowCount() > 0) {
                 // Return a custom error message for duplicate username
                 return json_encode(["message" => "Username already exists"]);
             }
-
-
+    
             $hashed_password = password_hash($Password, PASSWORD_DEFAULT);
             // Insert into users table
             $insertUserQuery = "INSERT INTO users (Username, Password, Email, ContactNumber) 
@@ -224,6 +223,28 @@ class Users{
     
             // Execute statement
             $statement->execute();
+    
+            $DoctorID = $dbo->conn->lastInsertId();
+    
+            // Select ClinicID using the clinic name
+            $selectClinicIDQuery = "SELECT ClinicID FROM clinics WHERE name = :clinic";
+            $statement = $dbo->conn->prepare($selectClinicIDQuery);
+            $statement->bindParam(':clinic', $clinic, PDO::PARAM_STR);
+            // Execute statement
+            $statement->execute();
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
+            $ClinicID = $result["ClinicID"];
+    
+            // Insert into doctorclinic table
+            $insertDoctorClinicQuery = "INSERT INTO doctorclinic (DoctorID, ClinicID) 
+                VALUES (:DoctorID, :ClinicID)";
+    
+            $statement = $dbo->conn->prepare($insertDoctorClinicQuery);
+            $statement->bindParam(':DoctorID', $DoctorID, PDO::PARAM_INT);
+            $statement->bindParam(':ClinicID', $ClinicID, PDO::PARAM_INT);
+            
+            // Execute statement
+            $statement->execute();
             send_welcome_email($Email, $FirstName, $LastName);
     
             // Return success message or any other information
@@ -239,6 +260,7 @@ class Users{
             }
         }
     }
+    
 
         
     

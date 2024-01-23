@@ -156,6 +156,18 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <label for="clinic" class="form-label">Clinic:</label>
+                    <select id="clinic" class="form-select" required>
+                        <option disabled selected value="">Select Clinic...</option>
+                        <option value="Rottal-In Clinic">Rottal-In Clinic</option>
+                        <option value="Passau Clinic">Passau Clinic</option>
+                        <option value="Eggenfelden Clinic">Eggenfelden Clinic</option>
+                        <option value="Munich Clinic">Munich Clinic</option>
+                        <option value="Mühldorf Clinic">Mühldorf Clinic</option>
+                        <option value="Burghausen Clinic">Burghausen Clinic</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" class="form-control" id="username" name="username" placeholder="Create your username">
                 </div>

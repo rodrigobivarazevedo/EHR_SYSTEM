@@ -54,6 +54,7 @@ if ($action === "register") {
     $email = isset($_POST["email"]) ? filter_var($_POST["email"], FILTER_SANITIZE_EMAIL) : null;
     $contactNumber = isset($_POST["contactNumber"]) ? filter_var($_POST["contactNumber"], FILTER_SANITIZE_STRING) : null;
     $speciality = isset($_POST["speciality"]) ? filter_var($_POST["speciality"], FILTER_SANITIZE_STRING) : null;
+    $clinic = isset($_POST["clinic"]) ? filter_var($_POST["clinic"], FILTER_SANITIZE_STRING) : null;
     $FirstName = isset($_POST["FirstName"]) ? filter_var($_POST["FirstName"], FILTER_SANITIZE_STRING) : null;
     $LastName = isset($_POST["LastName"]) ? filter_var($_POST["LastName"], FILTER_SANITIZE_STRING) : null;
     $gender = isset($_POST["gender"]) ? filter_var($_POST["gender"], FILTER_SANITIZE_STRING) : null;
@@ -61,12 +62,12 @@ if ($action === "register") {
 
 
     // Check if any of the required values are null
-    if (empty($username) || empty($password) || empty($email) || empty($contactNumber) || empty($speciality)) {
+    if (empty($username) || empty($password) || empty($email) || empty($contactNumber) || empty($speciality) || empty($clinic)) {
         echo json_encode(["message" => "All required fields must be provided."]);
         exit();
     }
 
-    $result = $pdo->create_user($dbo, $username, $password, $email, $contactNumber, $FirstName, $LastName, $gender, $birthdate, $speciality);
+    $result = $pdo->create_user($dbo, $username, $password, $email, $contactNumber, $FirstName, $LastName, $gender, $birthdate, $speciality, $clinic);
 
     echo $result;
 
