@@ -31,7 +31,7 @@ if ($action === "create_patient") {
     $doctorID = $Doctor["DoctorID"];
     
     if (!$doctorID) {
-        echo json_encode(["message" => "DoctorID not found"]);
+        echo json_encode(["message" => "Access Denied"]);
         exit(); // Terminate script execution after sending the response
     }
 
@@ -174,7 +174,7 @@ if ($action === "search_patients") {
     $Doctor = $statement->fetch(PDO::FETCH_ASSOC);
 
     if (!$Doctor) {
-        echo json_encode(["message" => "Doctor not found"]);
+        echo json_encode(["message" => "Access Denied"]);
         exit(); // Terminate script execution after sending the response
     }
 

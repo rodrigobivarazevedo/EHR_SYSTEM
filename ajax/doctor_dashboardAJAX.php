@@ -23,7 +23,7 @@ if ($action === "get_all_patients") {
     $DoctorID = $statement->fetch(PDO::FETCH_ASSOC);
 
     if (!$DoctorID) {
-        echo json_encode(["message" => "Doctor not found"]);
+        echo json_encode(["message" => "Access Denied"]);
         exit(); // Terminate script execution after sending the response
     }
 
@@ -122,7 +122,7 @@ if ($action === "send_message") {
     $userID = $statement->fetch(PDO::FETCH_ASSOC);
     
     if (!$userID) {
-        echo json_encode(["message" => "Doctor not found"]);
+        echo json_encode(["message" => "Access Denied"]);
         exit(); // Terminate script execution after sending the response
     }
 

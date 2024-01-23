@@ -29,12 +29,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
             }
         } else {
-            header("Location: error.php?message=Token has expired. Please initiate the password reset process again.");
+            header("Location: error.php?message=Invalid Token. Please initiate the password reset process again.");
             exit;
 
         }
     } else {
-        header("Location: error.php?message=Token has expired. Please initiate the password reset process again.");
+        header("Location: error.php?message=Invalid Token. Please initiate the password reset process again.");
         exit;
 
     }
@@ -69,17 +69,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 </div>
                 <div class="card-body">
                     <hr class="mt-4">
-                    <form id="resetPasswordForm" class="mt-3">
+                    <form id="resetPasswordForm" class="mt-3" method="POST" action="">
                         <div class="mb-3">
                             <label for="new_password" class="form-label">New Password:</label>
-                            <input type="password" class="form-control" id="new_password" placeholder="Enter new password" required>
+                            <input type="password" class="form-control" name="new_password" placeholder="Enter new password" required>
                         </div>
                         <div class="mb-3">
                             <label for="confirm_password" class="form-label">Confirm Password:</label>
-                            <input type="password" class="form-control" id="confirm_password" placeholder="Confirm new password" required>
+                            <input type="password" class="form-control" name="confirm_password" placeholder="Confirm new password" required>
                         </div>
+                        <button type="submit" class="btn btn-primary mt-3">Reset Password</button>
                     </form>
-                    <button type="button" class="btn btn-primary mt-3" onclick="reset_password()">Reset Password</button>
                 </div>
             </div>
         </div>
@@ -89,17 +89,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 </body>
 </html>
 
-
-
 <?php
 $root = $_SERVER["DOCUMENT_ROOT"];
 include_once $root . "/EHR_system/db/database.php";
 include_once $root . "/EHR_system/db/backend.php";
 $dbo = new Database();
 
+// Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate and sanitize inputs
-    $token = isset($_POST['token']) ? htmlspecialchars($_POST['token']) : null;
+    $token = isset($_GET['token']) ? htmlspecialchars($_GET['token']) : null;
     $newPassword = isset($_POST['new_password']) ? $_POST['new_password'] : null;
     $confirmPassword = isset($_POST['confirm_password']) ? $_POST['confirm_password'] : null;
 

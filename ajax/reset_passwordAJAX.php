@@ -4,7 +4,7 @@ include_once $root . "/EHR_system/db/database.php";
 require_once $root . "/EHR_system/db/mailer.php"; 
 $dbo = new Database();
 
-
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Process the form submission to initiate password reset
     $email = $_POST['email']; // Assuming your form has an input field with name 'email'
 
@@ -36,5 +36,6 @@ $dbo = new Database();
         echo json_encode(["message" => "User not found. Please check your email address."]);
       
     }
+}
 
 ?>
