@@ -42,58 +42,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 ?>
 
 
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Reset</title>
-    <!-- Include Bootstrap CSS file -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
-    <!-- Include Bootstrap JS file with Popper.js -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="styles.css">
-</head>
-
-<body>
-
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <h1 class="mb-4 text-center">MyFastCARE</h1>
-
-            <div class="card">
-                <div class="card-header">
-                    Reset Password
-                </div>
-                <div class="card-body">
-                    <hr class="mt-4">
-                    <form id="resetPasswordForm" class="mt-3" method="POST" action="">
-                        <div class="mb-3">
-                            <label for="new_password" class="form-label">New Password:</label>
-                            <input type="password" class="form-control" name="new_password" placeholder="Enter new password" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="confirm_password" class="form-label">Confirm Password:</label>
-                            <input type="password" class="form-control" name="confirm_password" placeholder="Confirm new password" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary mt-3">Reset Password</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-</body>
-</html>
-
 <?php
 $root = $_SERVER["DOCUMENT_ROOT"];
 include_once $root . "/EHR_system/db/database.php";
 include_once $root . "/EHR_system/db/backend.php";
 $dbo = new Database();
+
+// Initialize the message variable
+$message = "";
 
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -104,13 +60,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Check if passwords match
     if ($newPassword !== $confirmPassword) {
-        echo "Passwords do not match.";
+        $message = "Passwords do not match.";
         exit;
     }
 
     // Validate and sanitize token
     if (!$token) {
-        echo "Invalid token.";
+        $message = "Invalid token.";
         exit;
     }
 
@@ -142,12 +98,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $deleteTokenStatement->bindParam(':token', $token, PDO::PARAM_STR);
             $deleteTokenStatement->execute();
 
-            echo "Password reset successful. You can now log in with your new password.";
+            $message = "Password reset successful. You can now log in with your new password.";
         } else {
-            echo "Token has expired. Please initiate the password reset process again.";
+            $message = "Token has expired. Please initiate the password reset process again.";
         }
     } else {
-        echo "Invalid token. Please initiate the password reset process again.";
+        $message = "Invalid token. Please initiate the password reset process again.";
     }
 }
 ?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Reset</title>
+    <!-- Include Bootstrap CSS file -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <!-- Include Bootstrap JS file with Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="mb-4 text-center">MyFastCARE</h1>
+
+            <div class="card">
+                <div class="card-header">
+                    Reset Password
+                </div>
+                <div class="card-body">
+                    <hr class="mt-4">
+
+                    <form id="resetPasswordForm" class="mt-3" method="post" action="">
+                        <div class="mb-3">
+                            <label for="new_password" class="form-label">New Password:</label>
+                            <input type="password" class="form-control" name="new_password" placeholder="Enter new password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirm_password" class="form-label">Confirm Password:</label>
+                            <input type="password" class="form-control" name="confirm_password" placeholder="Confirm new password" required>
+                        </div>
+                        <!-- Add a hidden input for the token -->
+                        <input type="hidden" name="token" value="<?php echo isset($_POST['token']) ? htmlspecialchars($_POST['token']) : ''; ?>">
+                        <button type="submit" class="btn btn-primary mt-3">Reset Password</button>
+                    </form>
+
+                    <!-- Display the message in a centered container -->
+                    <div class="text-center mt-3">
+                        <?php if ($message): ?>
+                            <div class="alert <?php echo (strpos($message, 'successful') !== false) ? 'alert-success' : 'alert-danger'; ?>" role="alert">
+                                <?php echo $message; ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
