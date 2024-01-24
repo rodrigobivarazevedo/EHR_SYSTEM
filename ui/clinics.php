@@ -85,7 +85,7 @@
         <section class="py-5 text-center container">
           <div class="container mt-5">
 
-              <h1>FIND A CLINIC</h1>
+              <h1>OUR CLINICS</h1>
 
               <div class="findcaredropdowns">
         

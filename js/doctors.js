@@ -5,9 +5,10 @@ function get_doctorsInfo(selectedspeciality="", selectedclinic="",action="get_al
         dataType: "json", // Changed "JSON" to "json"
         data: { speciality: selectedspeciality, clinic: selectedclinic, action1: action },
         success: function(response) {
-            console.log(response);
             if (response.message) {
-              alert(response.message);
+              document.getElementById('doctors_results').textContent = `${response.message}`;
+              let content = document.getElementById('content');
+              content.innerHTML = '';
             }else{
               updateCardUI(response);
           }

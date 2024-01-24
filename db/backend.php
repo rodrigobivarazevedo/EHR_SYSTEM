@@ -80,7 +80,7 @@ class Doctorsinfo
                 // Encode the array as JSON and return it
                 return json_encode($returned_value);
             } else {
-                echo json_encode(["message" => "Server problems, comeback again"]);
+                echo json_encode(["message" => "No doctors found"]);
             }
 
             
