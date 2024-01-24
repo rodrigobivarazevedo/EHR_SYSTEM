@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 24, 2024 at 11:33 AM
+-- Generation Time: Jan 24, 2024 at 11:41 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -20,36 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `ehr`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `Appointments`
---
-
-CREATE TABLE `Appointments` (
-  `AppointmentID` int(11) NOT NULL,
-  `PatientID` int(11) DEFAULT NULL,
-  `DoctorID` int(11) DEFAULT NULL,
-  `ClinicID` int(11) DEFAULT NULL,
-  `TimeSlot` time DEFAULT NULL,
-  `AppointmentDate` date DEFAULT NULL,
-  `ConsultationType` varchar(255) DEFAULT NULL,
-  `Speciality` varchar(255) DEFAULT NULL,
-  `Status` varchar(20) DEFAULT 'Scheduled'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `Appointments`
---
-
-INSERT INTO `Appointments` (`AppointmentID`, `PatientID`, `DoctorID`, `ClinicID`, `TimeSlot`, `AppointmentDate`, `ConsultationType`, `Speciality`, `Status`) VALUES
-(7, 4, 1, 3, '09:00:00', '2024-01-18', 'Regular Checkup', 'Cardiology', 'Scheduled'),
-(8, 3, 1, 3, '10:30:00', '2024-01-19', 'Follow-up', 'Orthopedics', 'Scheduled'),
-(9, 3, 1, 3, '14:00:00', '2024-01-20', 'Initial Consultation', 'Dermatology', 'Scheduled'),
-(10, 5, 1, 3, '11:15:00', '2024-01-21', 'Regular Checkup', 'Neurology', 'Scheduled'),
-(11, 4, 1, 3, '15:45:00', '2024-01-22', 'Follow-up', 'Gastroenterology', 'Scheduled'),
-(12, 6, 1, 3, '08:30:00', '2024-01-23', 'Regular Checkup', 'Ophthalmology', 'Scheduled');
 
 -- --------------------------------------------------------
 
@@ -383,15 +353,6 @@ INSERT INTO `users` (`UserID`, `Username`, `Password`, `Email`, `ContactNumber`,
 --
 
 --
--- Indexes for table `Appointments`
---
-ALTER TABLE `Appointments`
-  ADD PRIMARY KEY (`AppointmentID`),
-  ADD KEY `PatientID` (`PatientID`),
-  ADD KEY `DoctorID` (`DoctorID`),
-  ADD KEY `ClinicID` (`ClinicID`);
-
---
 -- Indexes for table `clinics`
 --
 ALTER TABLE `clinics`
@@ -467,12 +428,6 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT for table `Appointments`
---
-ALTER TABLE `Appointments`
-  MODIFY `AppointmentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
-
---
 -- AUTO_INCREMENT for table `doctors`
 --
 ALTER TABLE `doctors`
@@ -517,13 +472,6 @@ ALTER TABLE `users`
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `Appointments`
---
-ALTER TABLE `Appointments`
-  ADD CONSTRAINT `appointments_ibfk_2` FOREIGN KEY (`DoctorID`) REFERENCES `Doctors` (`DoctorID`),
-  ADD CONSTRAINT `appointments_ibfk_3` FOREIGN KEY (`ClinicID`) REFERENCES `Clinics` (`ClinicID`);
 
 --
 -- Constraints for table `clinicspecialities`
