@@ -91,10 +91,7 @@ if (!isset($_SESSION['UserID'])) {
      <!-- Second Navbar for Tabs -->
      <ul class="nav nav-tabs mt-15" id="myTabs">
         <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#appointmentsTab">Appointments</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#patientsTab">Patients</a>
+            <a class="nav-link active" data-toggle="tab" href="#patientsTab">Patients</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#messagesTab">Messages</a>
@@ -106,16 +103,9 @@ if (!isset($_SESSION['UserID'])) {
 
     <div class="container mt-3">
     <div class="tab-content">
-        <!-- Appointments Tab Content -->
-        <div id="appointmentsTab" class="tab-pane fade show active">
-            <h2 id="appointments" class="mb-5">Appointments</h2>
-            <ul class="list-group">
-                <!-- Data will be populated here dynamically -->
-            </ul>
-        </div>
-
+       
         <!-- Documentation Tab Content -->
-        <div id="patientsTab" class="tab-pane fade">
+        <div id="patientsTab" class="tab-pane fade show active">
             <h2 id="doctor_patients" class="mb-5">Your Patients</h2>
             
                 <div class="album py-5 bg-light">

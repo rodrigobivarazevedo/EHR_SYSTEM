@@ -43,34 +43,6 @@ if ($action === "get_all_patients") {
 }
 
 
-
-if ($action === "appointments") {
-    $UserID = $_SESSION["UserID"];
-    $dbo = new Database();
-    $pdo = new Appointmentsinfo();
-
-    $statement = $dbo->conn->prepare(
-        "SELECT DoctorID FROM doctors WHERE UserID = :UserID"
-    );
-    $statement->bindParam(':UserID', $UserID, PDO::PARAM_INT);
- 
-    $statement->execute();
-    
-    $Doctor = $statement->fetch(PDO::FETCH_ASSOC);
-    $DoctorID = $Doctor["DoctorID"];
-    $result = $pdo->get_appointments($dbo, $DoctorID);
-
-    // Check if the result is an error
-    if (isset($result["error"])) {
-        // Handle the error, for example, send an appropriate response to the client
-        echo json_encode($result);
-    } else {
-        echo $result;
-    }
-    exit();
-}
-
-
 if ($action === "get_messages") {
     $UserID = $_SESSION["UserID"];
     

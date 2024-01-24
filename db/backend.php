@@ -2,42 +2,6 @@
 require_once "database.php";
 require_once "mailer.php"; 
 
-class Appointmentsinfo
-{
-    
-    public function get_appointments($dbo, $DoctorID)
-    {
-        try {
-            
-            // Use placeholders in the SQL query
-            $statement = $dbo->conn->prepare("SELECT a.AppointmentID as AppointmentID, a.Timeslot as Timeslot, a.AppointmentDate as AppointmentDate, p.PatientID as PatientID, p.FirstName as PatientFirstName, p.LastName as PatientLastName 
-            FROM appointments a
-            JOIN patients p ON a.PatientID = p.PatientID
-            WHERE a.DoctorID = :DoctorID
-            ");
-
-            // Bind parameters
-            $statement->bindParam(':DoctorID', $DoctorID, PDO::PARAM_INT);
-            
-            // Execute statement
-            $statement->execute();
-            // Fetch results
-            $appointments = $statement->fetchAll(PDO::FETCH_ASSOC);
-            if ($appointments){
-                echo json_encode($appointments);
-            } else{
-                echo json_encode(["message" => "No appointments found"]);
-            }
-    
-        } catch (PDOException $e) {
-            // Handle exceptions, log errors, or return an error message
-            echo json_encode(["error" => $e->getMessage()]);
-        }
-    }
-
-}
-
-
 
 class Doctorsinfo
 {
