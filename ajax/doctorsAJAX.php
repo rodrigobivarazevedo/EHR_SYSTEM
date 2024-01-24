@@ -4,9 +4,9 @@ $root = $_SERVER["DOCUMENT_ROOT"];
 include_once $root . "/EHR_system/db/database.php";
 include_once $root . "/EHR_system/db/backend.php";
 
-$speciality = $_POST["speciality"];
-$clinic = $_POST["clinic"];
-$action = $_POST["action1"];
+$speciality = $_GET["speciality"];
+$clinic = $_GET["clinic"];
+$action = $_GET["action1"];
 
 if ($action === "get_all") {
     $dbo = new Database();

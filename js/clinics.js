@@ -6,7 +6,7 @@ $(document).ready(function() {
 function get_clinics(selectedSpeciality="",action="get_all") {
     $.ajax({
         url: "/EHR_system/ajax/clinicsAJAX.php",
-        type: "POST",
+        type: "GET",
         dataType: "json", 
         data: { speciality: selectedSpeciality, action1: action },
         success: function(response) {

@@ -6,7 +6,7 @@ $(document).ready(function() {
 function get_personal_details() {
     $.ajax({
         url: "/EHR_system/ajax/accountAJAX.php",
-        type: "POST",
+        type: "GET",
         dataType: "json", 
         data: { action: "get_personal_details" },
         success: function(response) {

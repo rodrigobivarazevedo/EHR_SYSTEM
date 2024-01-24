@@ -1,7 +1,7 @@
 function get_doctorsInfo(selectedspeciality="", selectedclinic="",action="get_all") {
     $.ajax({
         url: "/EHR_system/ajax/doctorsAJAX.php",
-        type: "POST",
+        type: "GET",
         dataType: "json", // Changed "JSON" to "json"
         data: { speciality: selectedspeciality, clinic: selectedclinic, action1: action },
         success: function(response) {

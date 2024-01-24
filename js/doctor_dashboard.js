@@ -8,7 +8,7 @@ $(document).ready(function() {
 function get_all_patients() {
     $.ajax({
         url: "/EHR_system/ajax/doctor_dashboardAJAX.php",
-        type: "POST",
+        type: "GET",
         dataType: "json",
         data: { action: "get_all_patients" },
         success: function(response) {
@@ -115,7 +115,7 @@ function sendMessage() {
 function loadMessages() {
     $.ajax({
         url: '/EHR_system/ajax/doctor_dashboardAJAX.php',
-        type: 'POST',
+        type: 'GET',
         dataType: 'json',
         data: {action: "get_messages"},
         success: function (messagesData) {
@@ -136,7 +136,7 @@ function loadMessages() {
 function loadAppointments() {
     $.ajax({
         url: '/EHR_system/ajax/doctor_dashboardAJAX.php',
-        type: 'POST',
+        type: 'GET',
         dataType: 'json',
         data: {action: "appointments"},
         success: function (appointmentsData) {

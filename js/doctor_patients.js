@@ -57,7 +57,7 @@ function searchPatients() {
 function get_patients(parameter, searchQueryInputValue) {
     $.ajax({
         url: "/EHR_system/ajax/doctor_patientAJAX.php",
-        type: "POST",
+        type: "GET",
         dataType: "json", // Changed "JSON" to "json"
         data: { parameter: parameter, searchQueryInputValue: searchQueryInputValue, action: "search_patients" },
         success: function(response) {

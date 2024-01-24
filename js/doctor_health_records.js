@@ -26,7 +26,7 @@ document.getElementById('searchRecordID').addEventListener('input', function () 
 function get_health_record(recordID) {
     $.ajax({
         url: "/EHR_system/ajax/health_recordsAJAX.php",
-        type: "POST",
+        type: "GET",
         dataType: "json", // Changed "JSON" to "json"
         data: {InputValue: recordID, parameter: "RecordID", action: "search_health_records" },
         success: function(response) {
@@ -53,7 +53,7 @@ function get_health_record(recordID) {
 function get_health_records(patientID) {
     $.ajax({
         url: "/EHR_system/ajax/health_recordsAJAX.php",
-        type: "POST",
+        type: "GET",
         dataType: "json",
         data: { InputValue: patientID, parameter: "PatientID", action: "search_health_records" },
         success: function(response) {

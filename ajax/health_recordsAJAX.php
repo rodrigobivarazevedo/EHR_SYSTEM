@@ -5,7 +5,12 @@ $root = $_SERVER["DOCUMENT_ROOT"];
 include_once $root . "/EHR_system/db/database.php";
 include_once $root . "/EHR_system/db/backend.php";
 
-$action = $_POST["action"];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = $_POST["action"];
+} else if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $action = $_GET["action"];
+}
+
 $UserID = $_SESSION["UserID"];
 
 // Create an instance of the Records class
