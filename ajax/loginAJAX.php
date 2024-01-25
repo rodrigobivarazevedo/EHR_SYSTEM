@@ -18,7 +18,6 @@ if ($action === "login") {
 
     $dbo = new Database();
     $pdo = new Users();
-
     $result = $pdo->login($dbo, $UsernameOrEmail, $password);
 
     // Check if the result is an error
@@ -35,11 +34,9 @@ if ($action === "login") {
         $_SESSION["UserID"] = $data['UserID'];
         $_SESSION["Username"] = $data["username"];
         $_SESSION["Role"] = $data["role"];
-
     }
 
     echo $result;
-
     exit();
 }
 

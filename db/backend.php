@@ -69,12 +69,8 @@ class Clinicsinfo
                 WHERE s.name = :speciality;"
                 );
             } 
-
-            // Conditionally bind parameters
-            
+            // bind parameters
             $statement->bindParam(':speciality', $speciality, PDO::PARAM_STR);
-            
-           
             // Execute statement
             $statement->execute();
 
@@ -234,13 +230,10 @@ class Users{
                 $checkUserStatement = $dbo->conn->prepare("SELECT * FROM users WHERE Username = :UsernameOrEmail OR Email = :UsernameOrEmail");
                 $checkUserStatement->bindParam(':UsernameOrEmail', $UsernameOrEmail, PDO::PARAM_STR);
                 $checkUserStatement->execute();
-        
                 $user = $checkUserStatement->fetch(PDO::FETCH_ASSOC);
-        
                 if ($user) {
                     // User exists, now verify the password
                     $hashed_password = $user['Password'];
-        
                     if (password_verify($password, $hashed_password)) {
                         // Password is correct, user authenticated successfully
                         return json_encode(["success" => "Login successful", "UserID" => $user["UserID"], "username" => $user["Username"], "role" => $user["Role"]]);

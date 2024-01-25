@@ -126,8 +126,8 @@ if ($action === "delete_health_record") {
 
 if ($action === "search_health_records") {
     
-    $parameter = $_POST["parameter"];
-    $input = $_POST["InputValue"];
+    $parameter = $_GET["parameter"];
+    $input = $_GET["InputValue"];
 
     if ($parameter == "RecordID"){
         $result = $pdo->get_health_record($dbo, $input, $doctorID);

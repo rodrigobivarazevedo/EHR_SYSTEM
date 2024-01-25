@@ -1,5 +1,4 @@
 <?php
-
 class Database
 {
     private $servername = "127.0.0.1";
@@ -7,7 +6,6 @@ class Database
     private $password = "";
     private $dbname = "ehr";
     public $conn= "";
-
     public function __construct()
     {
         try {
@@ -18,13 +16,6 @@ class Database
         } catch(PDOException $e) {
             echo "Connection failed: " . $e->getMessage();
         }
-
     }
 }
-
-
-
-
-
-
 ?>

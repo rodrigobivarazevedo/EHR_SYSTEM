@@ -1,6 +1,5 @@
 $(document).ready(function() {
-    // Use AJAX to fetch user data
-    loadAppointments();  
+    // Use AJAX to fetch user data 
     loadMessages()
     get_all_patients();  
 });
@@ -16,8 +15,7 @@ function get_all_patients() {
                 document.getElementById('doctor_patients').textContent = `${response.message}`;
             }else{
                 updateCardUI(response)
-            }
-                
+            }     
         },
         error: function(xhr) {
             console.log(xhr.responseText);
@@ -25,8 +23,6 @@ function get_all_patients() {
         }
     });
 }
-
-
 
     function updateCardUI(data) {
       // Clear existing cards
@@ -44,7 +40,7 @@ function get_all_patients() {
                         
                           <div class="d-flex justify-content-between align-items-center">
                               <div class="btn-group">
-                              <button type="button" class="btn btn-sm btn-outline-secondary" id="view-edit-btn" onclick="editPatient('${patient.PatientID}','${patient.FirstName}', '${patient.LastName}', '${patient.Email}', '${patient.Birthdate}', '${patient.Gender}', '${patient.Address}', '${patient.ContactNumber}', '${patient.Smoker}')">View/Edit</button>
+                              <button type="button" class="btn btn-sm btn-outline-secondary" id="view-edit-btn" onclick="editPatient('${patient.PatientID}','${patient.FirstName}', '${patient.LastName}', '${patient.Email}', '${patient.Birthdate}', '${patient.Gender}', '${patient.Address}', '${patient.ContactNumber}', '${patient.Smoker}')">View</button>
                               </div>
                           </div>
                       </div>
@@ -131,63 +127,6 @@ function loadMessages() {
         }
     });
 }
-
-// Function to fetch and display appointments
-function loadAppointments() {
-    $.ajax({
-        url: '/EHR_system/ajax/doctor_dashboardAJAX.php',
-        type: 'GET',
-        dataType: 'json',
-        data: {action: "appointments"},
-        success: function (appointmentsData) {
-            if (appointmentsData.message) {
-                document.getElementById('appointments').textContent = `${appointmentsData.message}`;
-            }else{
-                renderAppointments(appointmentsData);
-            }
-            
-        },
-        error: function (error) {
-            console.error('Error fetching appointments:', error);
-        }
-    });
-}
-
-
-
-// Helper functions to render data in a tab
-function renderAppointments(data) {
-    const appointmentsTab = document.getElementById('appointmentsTab');
-    const listGroup = appointmentsTab.querySelector('.list-group');
-    listGroup.innerHTML = '';
-
-    data.forEach(item => {
-        const listItem = document.createElement('li');
-        listItem.classList.add('list-group-item');
-
-        const contentDiv = document.createElement('div');
-
-        const dateParagraph = document.createElement('p');
-        dateParagraph.textContent = `Date: ${item.AppointmentDate}`; // Update property name
-        contentDiv.appendChild(dateParagraph);
-
-        const timeParagraph = document.createElement('p');
-        timeParagraph.textContent = `Time: ${item.Timeslot}`; // Update property name
-        contentDiv.appendChild(timeParagraph);
-
-        const titleHeading = document.createElement('h6');
-        titleHeading.textContent = `PatientID: ${item.PatientID}   ${item.PatientFirstName} ${item.PatientLastName}`; 
-        contentDiv.appendChild(titleHeading);
-
-        const doctorParagraph = document.createElement('p');
-        doctorParagraph.textContent = `AppointmentID: ${item.AppointmentID}`; // Update property names
-        contentDiv.appendChild(doctorParagraph);
-
-        listItem.appendChild(contentDiv);
-        listGroup.appendChild(listItem);
-    });
-}
-
 
 function renderMessages(data) {
     const messagesTab = document.getElementById('messagesTab');

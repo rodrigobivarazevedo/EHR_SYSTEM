@@ -165,8 +165,8 @@ if ($action === "delete_patient") {
 
 if ($action === "search_patients") {
     $UserID = $_SESSION["UserID"];
-    $parameter = $_POST["parameter"];
-    $input = $_POST["searchQueryInputValue"];
+    $parameter = $_GET["parameter"];
+    $input = $_GET["searchQueryInputValue"];
 
     $dbo = new Database();
     $patients = new Patients();
