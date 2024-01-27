@@ -278,13 +278,18 @@ function deletePatient() {
 
     $.ajax({
         url: "/EHR_system/ajax/doctor_patientAJAX.php",
-        type: "POST",
+        type: "GET",
         dataType: "json",
         data: { parameter: "PatientID", searchQueryInputValue: patientID, action: "search_patients" },
         success: function(response) {
-            const FirstName = response[0].FirstName; 
-            const LastName = response[0].LastName;
-            confirmation(FirstName, LastName, patientID);
+            if (response.message){
+                alert(response.message);
+            } else {
+                const FirstName = response[0].FirstName; 
+                const LastName = response[0].LastName;
+                confirmation(FirstName, LastName, patientID);
+            }
+            
         },
         error: function(xhr) {
             console.log(xhr.responseText);

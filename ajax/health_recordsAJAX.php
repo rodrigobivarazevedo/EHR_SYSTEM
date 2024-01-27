@@ -25,13 +25,12 @@ $statement->execute();
 
 $Doctor = $statement->fetch(PDO::FETCH_ASSOC);
 
-if (!$Doctor) {
+if (!$Doctor["DoctorID"]) {
     echo json_encode(["message" => "Access denied"]);
     exit(); // Terminate script execution after sending the response
 }
 
-// Test get_patients function
-$doctorID = $Doctor["DoctorID"];
+$DoctorID = $Doctor["DoctorID"];
 
 
 if ($action === "create_health_record") {
@@ -44,7 +43,7 @@ if ($action === "create_health_record") {
     
     $DateRecorded = date("Y-m-d"); // Format: YYYY-MM-DD
 
-    $result = $pdo->create_health_record($dbo, $PatientID, $doctorID, $DateRecorded, $diagnosis, $medications, $procedures, $comments);
+    $result = $pdo->create_health_record($dbo, $PatientID, $DoctorID, $DateRecorded, $diagnosis, $medications, $procedures, $comments);
 
     // Check if the result is an error
     if (isset($result["error"])) {
@@ -70,15 +69,15 @@ if ($action === "update_health_record") {
     ];
 
     $statement = $dbo->conn->prepare(
-        "SELECT DoctorID FROM patients WHERE PatientID = :PatientID"
+        "SELECT DoctorID FROM patients WHERE PatientID = :patientID"
     );
-    $statement->bindParam(':PatientID', $PatientID, PDO::PARAM_INT);
+    $statement->bindParam(':patientID', $PatientID, PDO::PARAM_INT);
     $statement->execute();
     
-    $isDoctorPatient = $statement->fetch(PDO::FETCH_ASSOC);
-    
-    if (!$isDoctorPatient) {
-        echo json_encode(["message" => "Access denied, patient not yours"]);
+    $Patient_doctor = $statement->fetch(PDO::FETCH_ASSOC);
+    $Patient_doctorID = $Patient_doctor["DoctorID"];
+    if ($DoctorID !== $Patient_doctorID) {
+        echo json_encode(["message" => "Patient is not yours"]);
         exit(); // Terminate script execution after sending the response
     }
    
@@ -100,15 +99,15 @@ if ($action === "delete_health_record") {
     $PatientID = $_POST["PatientID"];
     
     $statement = $dbo->conn->prepare(
-        "SELECT DoctorID FROM patients WHERE PatientID = :PatientID"
+        "SELECT DoctorID FROM patients WHERE PatientID = :patientID"
     );
-    $statement->bindParam(':PatientID', $PatientID, PDO::PARAM_INT);
+    $statement->bindParam(':patientID', $PatientID, PDO::PARAM_INT);
     $statement->execute();
     
-    $isDoctorPatient = $statement->fetch(PDO::FETCH_ASSOC);
-    
-    if (!$isDoctorPatient) {
-        echo json_encode(["message" => "Access denied, patient not yours"]);
+    $Patient_doctor = $statement->fetch(PDO::FETCH_ASSOC);
+    $Patient_doctorID = $Patient_doctor["DoctorID"];
+    if ($DoctorID !== $Patient_doctorID) {
+        echo json_encode(["message" => "Patient is not yours"]);
         exit(); // Terminate script execution after sending the response
     }
 
@@ -130,9 +129,22 @@ if ($action === "search_health_records") {
     $input = $_GET["InputValue"];
 
     if ($parameter == "RecordID"){
-        $result = $pdo->get_health_record($dbo, $input, $doctorID);
+        $result = $pdo->get_health_record($dbo, $input, $DoctorID);
+
     } else if ($parameter == "PatientID"){
-        $result = $pdo->get_all_health_records($dbo, $doctorID, $input);
+        $statement = $dbo->conn->prepare(
+            "SELECT DoctorID FROM patients WHERE PatientID = :patientID"
+        );
+        $statement->bindParam(':patientID', $input, PDO::PARAM_INT);
+        $statement->execute();
+        
+        $Patient_doctor = $statement->fetch(PDO::FETCH_ASSOC);
+        $Patient_doctorID = $Patient_doctor["DoctorID"];
+        if ($DoctorID !== $Patient_doctorID) {
+            echo json_encode(["message" => "Patient is not yours"]);
+            exit(); // Terminate script execution after sending the response
+        }
+        $result = $pdo->get_all_health_records($dbo, $DoctorID, $input);
     }
  
     // Check if the result is an error

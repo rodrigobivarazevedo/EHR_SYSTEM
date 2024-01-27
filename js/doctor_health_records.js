@@ -244,13 +244,17 @@ function deleteRecord() {
 
     $.ajax({
         url: "/EHR_system/ajax/doctor_patientAJAX.php",
-        type: "POST",
+        type: "GET",
         dataType: "json",
         data: { parameter: "PatientID", searchQueryInputValue: PatientID, action: "search_patients" },
         success: function(response) {
-            const FirstName = response[0].FirstName; 
-            const LastName = response[0].LastName;
-            confirmation(FirstName, LastName, PatientID, RecordID);
+            if (response.message){
+                alert(response.message);
+            } else {
+                const FirstName = response[0].FirstName; 
+                const LastName = response[0].LastName;
+                confirmation(FirstName, LastName, PatientID, RecordID);
+            }
         },
         error: function(xhr) {
             console.log(xhr.responseText);
