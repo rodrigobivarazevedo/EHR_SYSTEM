@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 24, 2024 at 11:41 AM
+-- Generation Time: Jan 27, 2024 at 02:21 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -118,7 +118,7 @@ INSERT INTO `doctorclinic` (`DoctorID`, `ClinicID`) VALUES
 (19, 8),
 (20, 8),
 (31, 5),
-(34, 3);
+(37, 1);
 
 -- --------------------------------------------------------
 
@@ -162,7 +162,7 @@ INSERT INTO `doctors` (`DoctorID`, `UserID`, `FirstName`, `LastName`, `Specialit
 (19, 21, 'Jennifer', 'White', 'Family Doctor', NULL, NULL),
 (20, 22, 'David', 'Johnson', 'Family Doctor', NULL, NULL),
 (31, 47, 'kelly', 'khalil', 'Gastroenterology', 'Female', '1999-01-04'),
-(34, 50, 'Rodrigo', 'Azevedo', 'Cardiology', 'Male', '1999-12-04');
+(37, 53, 'Rodrigo', 'Azevedo', 'Nephrology', 'Male', '1999-12-04');
 
 -- --------------------------------------------------------
 
@@ -186,7 +186,7 @@ CREATE TABLE `HealthRecords` (
 --
 
 INSERT INTO `HealthRecords` (`RecordID`, `PatientID`, `DoctorID`, `DateRecorded`, `diagnosis`, `medications`, `procedures`, `comments`) VALUES
-(1, 4, 1, '2022-01-01', 'Pain in head', 'Medication 1', 'Procedure 1', 'Comments 1'),
+(1, 28, 1, '2022-01-01', 'Pain in shoulder', 'Ben u ron', 'Procedure 1', 'Comments 1'),
 (2, 4, 1, '2022-02-05', 'Pain in arm', 'Medication B', 'Procedure 2', 'Comments 2'),
 (3, 4, 1, '2022-03-10', 'Condition 3', 'Medication C', 'Procedure 3', 'Comments 3'),
 (4, 4, 1, '2022-04-15', 'Condition 4', 'Medication D', 'Procedure 4', 'Comments 4');
@@ -218,7 +218,9 @@ INSERT INTO `messages` (`MessageID`, `SenderID`, `ReceiverID`, `Content`, `Times
 (7, 3, 5, 'Hello Sarah, have you gotten the test results of patient 3', '2024-01-23 16:13:13', 0),
 (8, 5, 3, 'Hello Emily, i still didnt get the lab results back', '2024-01-23 16:14:58', 0),
 (9, 47, 3, 'Hello Emily this is kelly', '2024-01-24 09:57:03', 0),
-(10, 50, 3, 'hello emily this is rodrigo', '2024-01-24 10:40:23', 0);
+(11, 3, 5, 'hello mitchell', '2024-01-24 12:17:26', 0),
+(12, 3, 4, 'Hello Benjamin hope you are doing well', '2024-01-27 11:07:53', 0),
+(13, 3, 5, 'Hello Mitchell', '2024-01-27 13:10:31', 0);
 
 -- --------------------------------------------------------
 
@@ -241,7 +243,9 @@ INSERT INTO `password_resets` (`id`, `email`, `token`, `created_at`) VALUES
 (1, 'rodrigobivarazevedo1@gmail.com', '762468c072333e7077071e3999904e39f46f45cd9baf3f736570bda6f1488581', 1705940916),
 (2, 'rodrigobivarazevedo@gmail.com', 'a5454aae3639d9bb8c77d6717b482ac3c598370935401763b8822f551244b3f3', 1705941281),
 (3, 'rodrigobivarazevedo@gmail.com', '8068277df523adf188fcc043d4db9d0ddd9eae1935da0595ff09bf0d6089d8f4', 1705942207),
-(4, 'rodrigobivarazevedo@gmail.com', '3a7a5d043d1f2871bfa9e1caac5cc74f93aaef3657eed1417d173fba0efdbdab', 1706006387);
+(4, 'rodrigobivarazevedo@gmail.com', '3a7a5d043d1f2871bfa9e1caac5cc74f93aaef3657eed1417d173fba0efdbdab', 1706006387),
+(10, 'rodrigobivarazevedo@gmail.com', '30d6cd6f016e9ea0bc86b10ade95b61b158a03968e726b35fecba812814db621', 1706360178),
+(11, 'rodrigobivarazevedo@gmail.com', 'e72f4a5905b8a1ad3dbccb6cbde04f1a93e3f354389cf38e937b515430ddf2bb', 1706360238);
 
 -- --------------------------------------------------------
 
@@ -267,15 +271,13 @@ CREATE TABLE `patients` (
 --
 
 INSERT INTO `patients` (`PatientID`, `FirstName`, `LastName`, `ContactNumber`, `Email`, `Birthdate`, `Gender`, `Address`, `DoctorID`, `Smoker`) VALUES
-(4, 'Rodrigo', 'Azevedo', '964929299', 'rodrigo.azevedo@gmail.com', '1999-11-04', 'Male', '123 Main St', 1, 'no'),
-(5, 'Eduardo', 'Azevedo', '964829298', 'eduardoazevedo@gmail.com', '1999-11-23', 'Male', '123 Main St', 1, 'Yes'),
+(4, 'Rodrigo', 'Azevedo', '964929299', 'rodrigo.azevedo@gmail.com', '1999-11-04', 'Male', '123 Main St', 2, 'no'),
 (18, 'Francisca', 'Silva', '987676545', 'francisca.sliva@gmail.com', '2024-01-09', 'Female', 'pfarrkirchen', 1, 'Yes'),
 (19, 'Antonio', 'Silvestre', '908765654', 'antonio.silvestre@gmail.com', '2024-01-18', 'Male', 'pfarrkirchen', 1, 'No'),
 (20, 'Carlos', 'Cabrito', '987654321', 'carloscabrito@gmail.com', '2024-01-11', 'Male', 'pfarrkirchen', 1, 'Yes'),
 (21, 'Pedro ', 'Aparicio', '986376365', 'pedroaparicio@gmail.com', '2024-01-09', 'Male', 'lisbon', 1, 'No'),
 (22, 'Mariana', 'Castro', '908675462', 'marianacastro@gmail.com', '2024-01-16', 'Female', 'Lisbon', 1, 'Yes'),
 (23, 'Matilde', 'Oliveira', '983526172', 'matildeoliveira@gmail.com', '2024-01-26', 'Female', 'lisbon', 1, 'Yes'),
-(25, 'patricia', 'castro', '909354128', 'patriciacastro@gmail.com', '1998-06-16', 'Female', 'Lisbon', 1, 'No'),
 (26, 'Alexandre', 'Costa', '908767654', 'alexandrecosta@gmail.com', '1976-12-04', 'Male', 'lisbon', 1, 'No'),
 (28, 'Kelly', 'Khalil', '909098741', 'kelly@gmail.com', '1999-12-04', 'Female', 'pfarrkirchen', 1, 'Yes');
 
@@ -325,7 +327,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`UserID`, `Username`, `Password`, `Email`, `ContactNumber`, `Role`) VALUES
-(3, 'Emily Turner', '$2y$10$HGUQUL15VVzyKcLt4e684uws6RKO.8V3YOrjUw0qYpWRbj4HUYuzm', 'emilyturner123@gmail.com', '582726414', 'doctor'),
+(3, 'Emily Turner', '$2y$10$2nsYtkGhXX8rmsGA8IdrX.OwHFfjkZ2PTeJRsgVosCo11TejKixBC', 'emilyturner1@gmail.com', '582726414', 'doctor'),
 (4, 'Benjamin Hayes', '$2y$10$xruSs.zKflmdS9t9qdgcx.iwLggvi4vBewJF7OQ/Pr59U6akHMxPS', 'benjamin.hayes@gmail.com', '570024859', 'doctor'),
 (5, 'Sarah Mitchell', '$2y$10$xruSs.zKflmdS9t9qdgcx.iwLggvi4vBewJF7OQ/Pr59U6akHMxPS', 'sarah.mitchell@gmail.com', '560213219', 'doctor'),
 (6, 'Kevin Rodriguez', '$2y$10$xruSs.zKflmdS9t9qdgcx.iwLggvi4vBewJF7OQ/Pr59U6akHMxPS', 'kevin.rodriguez@gmail.com', '599986832', 'doctor'),
@@ -346,7 +348,7 @@ INSERT INTO `users` (`UserID`, `Username`, `Password`, `Email`, `ContactNumber`,
 (21, 'Jennifer White', '$2y$10$xruSs.zKflmdS9t9qdgcx.iwLggvi4vBewJF7OQ/Pr59U6akHMxPS', 'jennifer.white@gmail.com', '533527570', 'doctor'),
 (22, 'David Johnson', '$2y$10$xruSs.zKflmdS9t9qdgcx.iwLggvi4vBewJF7OQ/Pr59U6akHMxPS', 'david.johnson@gmail.com', '550292128', 'doctor'),
 (47, 'Kelly', '$2y$10$j0I36.kb9He0H9PfXE2vPe8PrBdYhiYk9jBvA1LTcNcYySP.5BR0G', 'kellykhalil048@gmail.com', '909898987', 'doctor'),
-(50, 'Rodrigo', '$2y$10$OPNKC0emGwSkU2sMbcKvnedMlSKxEwZMdHIsde6Y1lz17suRx6E6.', 'rodrigobivarazevedo@gmail.com', '909898765', 'doctor');
+(53, 'rodrigo', '$2y$10$Al9R4i/iii3RVMJ0rR6r0.Kyc8vWk4hb8c7X4KU2UooFPl4cd7xOi', 'rodrigobivarazevedo@gmail.com', '909898765', 'doctor');
 
 --
 -- Indexes for dumped tables
@@ -431,31 +433,31 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `doctors`
 --
 ALTER TABLE `doctors`
-  MODIFY `DoctorID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `DoctorID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `HealthRecords`
 --
 ALTER TABLE `HealthRecords`
-  MODIFY `RecordID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `RecordID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `MessageID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `MessageID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `password_resets`
 --
 ALTER TABLE `password_resets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `patients`
 --
 ALTER TABLE `patients`
-  MODIFY `PatientID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `PatientID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `specialities`
@@ -467,7 +469,7 @@ ALTER TABLE `specialities`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- Constraints for dumped tables
