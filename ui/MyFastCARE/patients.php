@@ -16,9 +16,8 @@ if (!isset($_SESSION['UserID'])) {
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Hugo 0.88.1">
+    <meta name="description" content="FastCARE, implementing digital solutions for doctors in healthcare">
+    <meta name="author" content="Rodrigo Azevedo, Kelly Khalil">
     <title>FastCARE</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 

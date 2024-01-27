@@ -13,20 +13,20 @@ function send_welcome_email($to, $FirstName, $LastName) {
 
             // Set the mail server details
             $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com'; // Replace with your SMTP server address
+            $mail->Host = 'smtp.gmail.com'; // SMTP server address
             $mail->SMTPAuth = true;
-            $mail->Username = 'myfastcaresolutions@gmail.com'; // Replace with your SMTP username
-            $mail->Password = 'ells ijzk izde byyu'; // Replace with your SMTP password
-            $mail->SMTPSecure = 'tls'; // Use 'tls' or 'ssl' depending on your server configuration
-            $mail->Port = 587; // Use the appropriate port for your server
+            $mail->Username = 'myfastcaresolutions@gmail.com'; // SMTP username
+            $mail->Password = 'ells ijzk izde byyu'; // SMTP password
+            $mail->SMTPSecure = 'tls'; 
+            $mail->Port = 587; //  port for server
 
             // Set the sender and recipient email addresses
             $mail->setFrom('myfastcaresolutions@gmail.com', 'FastCARE');
             $mail->addAddress($to, $FirstName . ' ' . $LastName);
 
             //Attachments
-            //$mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
-            //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+            //$mail->addAttachment('../images/logo.png', 'logo.png');         //attachments
+           
             $subject = 'Welcome to MyFastCARE!';
 
             $message = '<html>
@@ -47,7 +47,7 @@ function send_welcome_email($to, $FirstName, $LastName) {
             $mail->isHTML(true);                                  //Set email format to HTML
             $mail->Subject = $subject;
             $mail->Body    = $message;
-            //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+           
 
                 // Send the email
                 $mail->send();
@@ -63,20 +63,20 @@ function sendPasswordResetEmail($to, $token) {
 
             // Set the mail server details
             $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com'; // Replace with your SMTP server address
+            $mail->Host = 'smtp.gmail.com'; // SMTP server address
             $mail->SMTPAuth = true;
-            $mail->Username = 'myfastcaresolutions@gmail.com'; // Replace with your SMTP username
-            $mail->Password = 'ells ijzk izde byyu'; // Replace with your SMTP password
-            $mail->SMTPSecure = 'tls'; // Use 'tls' or 'ssl' depending on your server configuration
-            $mail->Port = 587; // Use the appropriate port for your server
+            $mail->Username = 'myfastcaresolutions@gmail.com'; // SMTP username
+            $mail->Password = 'ells ijzk izde byyu'; // SMTP password
+            $mail->SMTPSecure = 'tls'; 
+            $mail->Port = 587; 
 
             // Set the sender and recipient email addresses
             $mail->setFrom('myfastcaresolutions@gmail.com', 'FastCARE');
             $mail->addAddress($to);
 
             //Attachments
-            //$mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
-            //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+            //$mail->addAttachment('../images/logo.png', 'logo.png');
+
             $subject = 'Password Reset MyFastCARE';
 
             $message = 'Click the following link to reset your password: http://localhost/EHR_system/ui/reset_password.php?token=' . $token;
@@ -85,7 +85,7 @@ function sendPasswordResetEmail($to, $token) {
             $mail->isHTML(true);                                  //Set email format to HTML
             $mail->Subject = $subject;
             $mail->Body    = $message;
-            //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+           
 
                 // Send the email
                 $mail->send();
@@ -95,3 +95,5 @@ function sendPasswordResetEmail($to, $token) {
             }
         
         }
+
+?>
