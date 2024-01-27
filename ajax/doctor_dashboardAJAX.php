@@ -31,7 +31,7 @@ if ($action === "get_all_patients") {
         exit(); // Terminate script execution after sending the response
     }
 
-    // Test get_patients function
+    
     $doctorID = $DoctorID["DoctorID"];
 
     $result = $patients->get_all_patients($dbo, $doctorID);

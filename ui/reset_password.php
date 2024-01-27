@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Validate and sanitize token
+    // Validate token
     if (!$token) {
         $message = "Invalid token.";
         exit;
@@ -77,8 +77,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tokenInfo = $checkTokenStatement->fetch(PDO::FETCH_ASSOC);
 
     if ($tokenInfo) {
-        // Check if the token is still valid (e.g., not expired)
-        $expiryTime = strtotime('+1 hour', $tokenInfo['created_at']); // Assuming the token is valid for 1 hour
+        // Check if the token is still valid (not expired)
+        $expiryTime = strtotime('+1 hour', $tokenInfo['created_at']); // token is valid for 1 hour
 
         if (time() <= $expiryTime) {
             // Token is valid, update the user's password

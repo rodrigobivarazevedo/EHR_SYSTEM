@@ -15,7 +15,7 @@ function login() {
                 const redirectURL = `/EHR_system/ui/MyFastCARE/doctor_portal.php`;
                 window.location.href = redirectURL;
             } else if (response.message) {
-                // Handle unsuccessful login (e.g., display an error message)
+              
                 alert(response.message);
             }
         },
@@ -32,20 +32,20 @@ function login() {
 
 // Function to validate email
 function isValidEmail(email) {
-    // Use a regular expression for basic email validation
+    // regular expression for basic email validation
     var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
 }
 
 // Function to validate contact number
 function isValidContactNumber(contactNumber) {
-    // Use a regular expression for basic contact number validation
+    // egular expression for basic contact number validation with 9 digits
     var contactNumberRegex = /^\d{9}$/;
     return contactNumberRegex.test(contactNumber);
 }
 
 function isStrongPassword(password) {
-    // You can define your own criteria for a strong password, e.g., minimum length, mix of uppercase, lowercase, numbers, and special characters.
+    //  criteria for a strong password, 8 minimum length, 1 uppercase, 1 lowercase, 1 number, 1 special characters.
     const minLength = 8;
     const hasUppercase = /[A-Z]/.test(password);
     const hasLowercase = /[a-z]/.test(password);
@@ -56,7 +56,7 @@ function isStrongPassword(password) {
 }
 
 function generateStrongPassword() {
-    const length = 8; // Adjust the desired password length
+    const length = 8; // password length
     const uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
     const numberChars = "0123456789";
@@ -74,7 +74,7 @@ function generateStrongPassword() {
         getRandomChar(numberChars) +
         getRandomChar(specialChars);
 
-    // Fill the remaining characters with a mix of all character sets
+    
     for (let i = password.length; i < length; i++) {
         const allChars = uppercaseChars + lowercaseChars + numberChars + specialChars;
         password += getRandomChar(allChars);
@@ -167,7 +167,7 @@ function register() {
     
     // Perform AJAX call for registration
     $.ajax({
-        url: "/EHR_system/ajax/loginAJAX.php",  // Adjust the URL for registration
+        url: "/EHR_system/ajax/loginAJAX.php",  
         type: "POST",
         dataType: "json",
         data: {
@@ -181,7 +181,7 @@ function register() {
             LastName: LastName, 
             gender: gender, 
             birthdate: birthdate,      
-            action: "register"  // Adjust the action for registration
+            action: "register"  
         },
         success: function (response) {
             // Check if the registration was successful
@@ -190,7 +190,7 @@ function register() {
                 alert(response.success);
                 window.location.href = "/EHR_system/ui/MyFastCARE/login.php"; 
             } else if(response.message) {
-                // Redirect to a success page or handle as needed
+               
                 alert(response.message);
             }
         },
@@ -219,7 +219,7 @@ function reset_password() {
 
     // Perform AJAX call for password reset
     $.ajax({
-        url: "/EHR_system/ajax/reset_passwordAJAX.php",  // Adjust the URL for password reset
+        url: "/EHR_system/ajax/reset_passwordAJAX.php",  
         type: "POST",
         dataType: "json",
         data: {

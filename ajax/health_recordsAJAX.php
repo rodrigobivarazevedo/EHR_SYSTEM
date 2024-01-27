@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $UserID = $_SESSION["UserID"];
 
-// Create an instance of the Records class
+
 $pdo = new Records();
 $dbo = new Database();
 
@@ -95,7 +95,7 @@ if ($action === "update_health_record") {
 
 if ($action === "delete_health_record") {
     
-    $recordID = $_POST["RecordID"]; // Assuming the parameter is named recordID
+    $recordID = $_POST["RecordID"]; 
     $PatientID = $_POST["PatientID"];
     
     $statement = $dbo->conn->prepare(

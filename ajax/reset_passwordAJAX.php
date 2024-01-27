@@ -5,10 +5,9 @@ require_once $root . "/EHR_system/db/mailer.php";
 $dbo = new Database();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Process the form submission to initiate password reset
-    $email = $_POST['email']; // Assuming your form has an input field with name 'email'
+    
+    $email = $_POST['email']; 
 
-    // Validate email (add your validation logic here)
 
     // Check if the email exists in your database
     $checkEmailStatement = $dbo->conn->prepare("SELECT UserID FROM users WHERE Email = :email");

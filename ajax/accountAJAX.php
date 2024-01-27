@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 $UserID = $_SESSION["UserID"];
 
-// Create an instance of the Records class
+
 $pdo = new Users();
 $dbo = new Database();
 
@@ -29,7 +29,7 @@ if (!$Doctor) {
     exit(); // Terminate script execution after sending the response
 }
 
-// Test get_patients function
+
 $doctorID = $Doctor["DoctorID"];
 
 if ($action === "get_personal_details") {

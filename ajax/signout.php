@@ -1,7 +1,4 @@
 <?php
-// signout.php
-
-// Start or resume the existing session
 session_start();
 
 // Unset all session variables
